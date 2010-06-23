@@ -9,11 +9,22 @@ function Formatter(placeholderFormatters) {
 			values.push(arguments[i]);
 		}
 
-		var replacement = function(match, placeholder) {
-			return self.formatPlaceholder(placeholder, values);
+		var replacement = function(match, wrapper, placeholder1, prefix, placeholder2Wrapper, placeholder2) {
+			if(prefix === '\\') {
+				return placeholder2Wrapper;
+			}
+
+			var placeholder = placeholder1 || placeholder2;
+
+			return (prefix || '') + self.formatPlaceholder(placeholder, values);
 		};
 
-		return text.replace(/\{([0-9]+[^}]*)\}/g, replacement);
+		/* I wish JS had lookbehinds. */
+		var reString = '\\{([0-9]+[^}]*)\\}';
+
+		var re = new RegExp('(^' + reString + '|(.)(' + reString + '))', 'g');
+
+		return text.replace(re, replacement);
 	};
 
 	this.formatPlaceholder = function(placeholder, values) {

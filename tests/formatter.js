@@ -37,6 +37,12 @@ new Test.Unit.Runner({
 		this.assertEqual('You have 2 cows; I have 1 cow', formatter.format('You have {0#} {0|cows|cow|cows}; I have {1#} {1|cows|cow|cows}', 2, 1));
 	},
 
+	testFormatEscape: function() {
+		var formatter = new Formatter();
+
+		this.assertEqual('foo{0bar}', formatter.format('foo\\{0bar}'));
+	},
+
 	testNoPlaceholderFunctionReturnsNull: function() {
 		var formatter = new Formatter();
 
