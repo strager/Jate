@@ -6,7 +6,7 @@ new Test.Unit.Runner({
 		this.assertEqual('{b0ar}x!@$!05', formatter.format('{b0ar}x!@$!05'));
 	},
 
-	testDefaultPlaceholderCallsCustomOnce: function() {
+	testDefaultPlaceholderCallsDefaultOnce: function() {
 		var callCount = 0;
 
 		var formatter = new Formatter({
@@ -20,7 +20,7 @@ new Test.Unit.Runner({
 		this.assertEqual(1, callCount);
 	},
 
-	testDefaultPlaceholderCallsCustomWithValue: function() {
+	testDefaultPlaceholderCallsDefaultWithValue: function() {
 		var callValue = undefined;
 
 		var formatter = new Formatter({
@@ -34,7 +34,7 @@ new Test.Unit.Runner({
 		this.assertEqual(10, callValue);
 	},
 
-	testDefaultPlaceholderUsesCustomReturnValue: function() {
+	testDefaultPlaceholderUsesReturnValue: function() {
 		var formatter = new Formatter({
 			'default': function(value) {
 				return 'bar';
@@ -42,5 +42,95 @@ new Test.Unit.Runner({
 		});
 
 		this.assertEqual('bar', formatter.formatPlaceholder('0'));
+	},
+
+	testCustomPlaceholderCallsDefault: function() {
+		var callCustom = undefined;
+
+		var formatter = new Formatter({
+			'default': function(value, custom) {
+				callCustom = custom;
+			}
+		});
+
+		formatter.formatPlaceholder('0fdf~w00t');
+
+		this.assertEqual('fdf~w00t', callCustom);
+	},
+
+	testCustomPlaceholderCallsCustomOnce: function() {
+		var callCount = 0;
+
+		var formatter = new Formatter({
+			'~': function(value) {
+				++callCount;
+			}
+		});
+
+		formatter.formatPlaceholder('0~');
+
+		this.assertEqual(1, callCount);
+	},
+
+	testExtendedCustomPlaceholderCallsCustomOnce: function() {
+		var callCount = 0;
+
+		var formatter = new Formatter({
+			'~': function(value) {
+				++callCount;
+			}
+		});
+
+		formatter.formatPlaceholder('0~@#$');
+
+		this.assertEqual(1, callCount);
+	},
+
+	testExtendedCustomPlaceholderCallsProperCustomOnce: function() {
+		var callCount = 0;
+		var badCallCount = 0;
+
+		var formatter = new Formatter({
+			'default': function(value) {
+				++badCallCount;
+			},
+
+			'~': function(value) {
+				++badCallCount;
+			},
+
+			'~@': function(value) {
+				++callCount;
+			}
+		});
+
+		formatter.formatPlaceholder('0~@#$');
+
+		this.assertEqual(1, callCount);
+		this.assertEqual(0, badCallCount);
+	},
+
+	testCustomPlaceholderCallsCustomWithValue: function() {
+		var callValue = undefined;
+
+		var formatter = new Formatter({
+			'~': function(value) {
+				callValue = value;
+			}
+		});
+
+		formatter.formatPlaceholder('0~', [ 10 ]);
+
+		this.assertEqual(10, callValue);
+	},
+
+	testCustomPlaceholderUsesCustomReturnValue: function() {
+		var formatter = new Formatter({
+			'~': function(value) {
+				return 'bar';
+			}
+		});
+
+		this.assertEqual('bar', formatter.formatPlaceholder('0~'));
 	}
 });

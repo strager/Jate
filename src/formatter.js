@@ -1,4 +1,6 @@
 function Formatter(placeholderFormatters) {
+	this.placeholderFormatters = placeholderFormatters;
+
 	this.format = function(text) {
 		return text;
 	};
@@ -6,19 +8,41 @@ function Formatter(placeholderFormatters) {
 	this.formatPlaceholder = function(placeholder, values) {
 		values = values || [ ];
 
-		var index = getPlaceholderIndex(placeholder);
-		var value = typeof index === 'undefined' || index > values.length ? undefined : values[index];
+		var parts = placeholder.match(/^([0-9]+)(.*)$/);
 
-		return placeholderFormatters['default'].call(this, value);
-	};
-
-	function getPlaceholderIndex(placeholder) {
-		var num = parseInt(placeholder, 10);
-
-		if(num === NaN) {
-			return undefined;
+		if(!parts) {
+			return null;
+			// FIXME Exception?
 		}
 
-		return num;
-	}
+		var index = parseInt(parts[1], 10);
+		var value = index === NaN || index > values.length ? undefined : values[index];
+
+		var rest = parts[2];
+		var formatterName = this._getPlaceholderFormatterName(rest);
+		var formatter = this.placeholderFormatters[formatterName || 'default'];
+
+		var options = rest.substr(formatterName.length);
+
+		if(!formatter) {
+			return null;
+			// FIXME Exception?
+		}
+
+		return formatter.call(this, value, options);
+	};
+
+	this._getPlaceholderFormatterName = function(rest) {
+		var i, name;
+
+		for(i = rest.length; i > 0; --i) {
+			name = rest.substr(0, i);
+
+			if(this.placeholderFormatters.hasOwnProperty(name)) {
+				return name;
+			}
+		}
+
+		return '';
+	};
 }
