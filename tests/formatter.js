@@ -176,5 +176,27 @@ new Test.Unit.Runner({
 		});
 
 		this.assertEqual('bar', formatter.formatPlaceholder('0~'));
+	},
+
+	testStringFormat: function() {
+		this.assertEqual('fsdf$', Formatter.formats.string('fsdf$'));
+		this.assertEqual('5451', Formatter.formats.string(5451));
+		this.assertEqual('poo', Formatter.formats.string({
+			toString: function() {
+				return 'poo';
+			}
+		}));
+	},
+
+	testNumberFormat: function() {
+		this.assertEqual('54678', Formatter.formats.number(54678));
+		this.assertEqual('     54678', Formatter.formats.number(54678, '10.'));
+		this.assertEqual('0000054678', Formatter.formats.number(54678, '010.'));
+		this.assertEqual('54.678', Formatter.formats.number(54.678));
+		this.assertEqual('54.68', Formatter.formats.number(54.678, '.2'));
+		this.assertEqual('  54.68', Formatter.formats.number(54.678, '4.2'));
+		this.assertEqual('  54.678', Formatter.formats.number(54.678, '4.'));
+		this.assertEqual('0054.68', Formatter.formats.number(54.678, '04.2'));
+		this.assertEqual('0054.678', Formatter.formats.number(54.678, '04.'));
 	}
 });

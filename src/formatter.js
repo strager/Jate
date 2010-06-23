@@ -68,3 +68,40 @@ function Formatter(placeholderFormatters) {
 		return '';
 	};
 }
+
+Formatter.placeholderFormatters = {
+	string: function(value) {
+		return value.toString ? value.toString() : value + '';
+	},
+
+	number: function(value, options) {
+		var optionParts = (options || '').split('.');
+		var num = parseFloat(value, 10);
+		var ret;
+		var fixedLength = -1;
+		var minLeftLength = 0;
+		var leftPadValue = ' ';
+
+		if(optionParts.length === 2) {
+			fixedLength = optionParts[1] ? parseInt(optionParts[1], 10) : NaN;
+			fixedLength = isNaN(fixedLength) ? -1 : fixedLength;
+
+			minLeftLength = optionParts[0] ? parseInt(optionParts[0], 10) : NaN;
+			minLeftLength = isNaN(minLeftLength) ? 0 : minLeftLength;
+
+			if(optionParts[0].length > 0 && optionParts[0][0] === '0') {
+				leftPadValue = '0';
+			}
+		}
+
+		ret = fixedLength < 0 ? num.toString() : num.toFixed(optionParts[1]);
+
+		while(ret.match(/^(.*(?=\.)|.*$)/)[0].length < minLeftLength) {
+			ret = leftPadValue + ret;
+		}
+
+		return ret;
+	}
+};
+
+Formatter.formats = Formatter.placeholderFormatters;
