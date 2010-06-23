@@ -2,7 +2,18 @@ function Formatter(placeholderFormatters) {
 	this.placeholderFormatters = placeholderFormatters || { };
 
 	this.format = function(text) {
-		return text;
+		var values = [ ], i;
+		var self = this;
+
+		for(i = 1; i < arguments.length; ++i) {
+			values.push(arguments[i]);
+		}
+
+		var replacement = function(match, placeholder) {
+			return self.formatPlaceholder(placeholder, values);
+		};
+
+		return text.replace(/\{([0-9]+[^}]*)\}/g, replacement);
 	};
 
 	this.formatPlaceholder = function(placeholder, values) {

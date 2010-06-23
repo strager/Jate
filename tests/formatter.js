@@ -3,7 +3,38 @@ new Test.Unit.Runner({
 		var formatter = new Formatter();
 
 		this.assertEqual('foo', formatter.format('foo'));
-		this.assertEqual('{b0ar}x!@$!05', formatter.format('{b0ar}x!@$!05'));
+		this.assertEqual('{b0ar}x!@$!05', formatter.format('{b0ar}x!@$!05', '99999'));
+	},
+
+	testFormatDefault: function() {
+		var formatter = new Formatter({
+			'default': function(value) {
+				return value.toString ? value.toString() : value + '';
+			}
+		});
+
+		this.assertEqual('barx', formatter.format('ba{0}', 'rx'));
+		this.assertEqual('This is a test', formatter.format('{0} {1} {2} {3}', 'This', 'is', 'a', 'test'));
+		this.assertEqual('Hello, world', formatter.format('{2}, {1}', 'bad', 'world', 'Hello'));
+	},
+
+	testFormatCustom: function() {
+		var formatter = new Formatter({
+			'$': function(value) {
+				return value.toFixed(2);
+			},
+
+			'|': function(value, options) {
+				return options.split('|')[value];
+			},
+
+			'#': function(value) {
+				return value.toString();
+			}
+		});
+
+		this.assertEqual('over 9000.00', formatter.format('over {0$}', 9000));
+		this.assertEqual('You have 2 cows; I have 1 cow', formatter.format('You have {0#} {0|cows|cow|cows}; I have {1#} {1|cows|cow|cows}', 2, 1));
 	},
 
 	testNoPlaceholderFunctionReturnsNull: function() {
