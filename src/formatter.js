@@ -1,5 +1,5 @@
 function Formatter(placeholderFormatters) {
-	this.placeholderFormatters = placeholderFormatters;
+	this.placeholderFormatters = placeholderFormatters || { };
 
 	this.format = function(text) {
 		return text;

@@ -1,9 +1,16 @@
 new Test.Unit.Runner({
-	testRawStringReturnsSelf: function() {
+	testFormatRawStringReturnsSelf: function() {
 		var formatter = new Formatter();
 
 		this.assertEqual('foo', formatter.format('foo'));
 		this.assertEqual('{b0ar}x!@$!05', formatter.format('{b0ar}x!@$!05'));
+	},
+
+	testNoPlaceholderFunctionReturnsNull: function() {
+		var formatter = new Formatter();
+
+		this.assertEqual(null, formatter.formatPlaceholder('0', [ 'wootpoot' ]));
+		this.assertEqual(null, formatter.formatPlaceholder('2', [ 0, '9', { 'x': 'y' } ]));
 	},
 
 	testDefaultPlaceholderCallsDefaultOnce: function() {
