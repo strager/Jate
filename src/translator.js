@@ -1,8 +1,23 @@
 function Translator(/* translations ... */) {
+	var sourcePrefix = '\0\0';
+	var sourceContextDivider = '\0';
 	var translations = { };
 
-	this.addTranslation = function(source, translation) {
-		translations[source] = translation;
+	this.addTranslation = function(source, /* [context], */ translation) {
+		var context, key;
+
+		if(arguments.length > 2) {
+			context = arguments[1];
+			translation = arguments[2];
+		}
+
+		if(source.indexOf(sourceContextDivider) >= 0 || (context || '').indexOf(sourceContextDivider) >= 0) {
+			throw new Error('Translation source may not contain sourceContextDivider');
+		}
+
+		key = getKeyFromSourceContext(source, context);
+
+		translations[key] = translation;
 	};
 
 	this.addTranslations = function(translations) {
@@ -21,11 +36,17 @@ function Translator(/* translations ... */) {
 		this.addTranslations(arguments[i]);
 	}
 
-	this.translate = function(text) {
-		if(translations.hasOwnProperty(text)) {
-			return translations[text];
+	this.translate = function(text, context /* = undefined */) {
+		var key = getKeyFromSourceContext(text, context);
+
+		if(translations.hasOwnProperty(key)) {
+			return translations[key];
 		}
 
 		return text;
 	};
+
+	function getKeyFromSourceContext(source, context) {
+		return sourcePrefix + source + (context ? sourceContextDivider + context : '');
+	}
 }

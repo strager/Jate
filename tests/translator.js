@@ -18,7 +18,7 @@ new Test.Unit.Runner({
 
 	testAddTranslationToEmpty: function() {
 		var translator = new Translator();
-		
+
 		translator.addTranslation('foobar is very cool', 'foobar est trés cool');
 
 		this.assertEqual('foobar est trés cool', translator.translate('foobar is very cool'));
@@ -27,7 +27,7 @@ new Test.Unit.Runner({
 
 	testAddTranslationsToEmpty: function() {
 		var translator = new Translator();
-		
+
 		translator.addTranslations({
 			'foobar is very cool': 'foobar est trés cool',
 			'{0} {1}': '{1}, {0}'
@@ -39,7 +39,7 @@ new Test.Unit.Runner({
 
 	testAddTranslationToExistingReplaces: function() {
 		var translator = new Translator();
-		
+
 		translator.addTranslation('foobar is very cool', 'foobar n\'est pas cool');
 		translator.addTranslation('foobar is very cool', 'foobar est trés cool');
 
@@ -49,7 +49,7 @@ new Test.Unit.Runner({
 
 	testAddTranslationsToExistingReplaces: function() {
 		var translator = new Translator();
-		
+
 		translator.addTranslations({
 			'foobar is very cool': 'foobar est si cool, n\'est-ce pas?',
 			'{0} {1}': 'quoi {1}, {0}'
@@ -62,6 +62,36 @@ new Test.Unit.Runner({
 
 		this.assertEqual('foobar est trés cool', translator.translate('foobar is very cool'));
 		this.assertEqual('{1}, {0}', translator.translate('{0} {1}'));
+	},
+
+	testAddContextualTranslationCoexistsWithExisting: function() {
+		var translator = new Translator();
+
+		translator.addTranslation('source', 'origin');
+		translator.addTranslation('source', 'context', 'traduction');
+
+		this.assertEqual('origin', translator.translate('source'));
+		this.assertEqual('traduction', translator.translate('source', 'context'));
+	},
+
+	testAddContextualTranslationDoesNotAddNoContext: function() {
+		var translator = new Translator();
+
+		translator.addTranslation('source', 'context', 'traduction');
+
+		this.assertEqual('source', translator.translate('source'));
+	},
+
+	testAddContextualTranslationWithNullCharThrows: function() {
+		var translator = new Translator();
+
+		this.assertRaise('Error', function() {
+			translator.addTranslation('source', 'c\00kies', 'traduction');
+		});
+
+		this.assertRaise('Error', function() {
+			translator.addTranslation('s\0urce', 'c00kies', 'traduction');
+		});
 	}
 });
 
