@@ -2,7 +2,9 @@ function FormattingTranslator() {
 }
 
 FormattingTranslator.Pluralizer = function(indexerFunction) {
-	this.getIndex = function(count) {
+	var optionsDivider = '|';
+
+	function getIndex(count) {
 		var index = indexerFunction.call(this, count);
 
 		if(index < 0) {
@@ -16,8 +18,8 @@ FormattingTranslator.Pluralizer = function(indexerFunction) {
 		return index;
 	};
 
-	this.pluralize = function(count, parameters) {
-		var index = this.getIndex(count);
+	function pluralize(count, parameters) {
+		var index = getIndex(count);
 
 		if(index < 0 || index >= parameters.length) {
 			throw new Error('Index out of range');
@@ -29,4 +31,14 @@ FormattingTranslator.Pluralizer = function(indexerFunction) {
 
 		return parameters[index];
 	};
+
+	function format(value, options) {
+		var parts = options.split(optionsDivider);
+
+		return pluralize(parseInt(value, 10), parts);
+	}
+
+	this.getIndex = getIndex;
+	this.pluralize = pluralize;
+	this.formatter = format;
 };

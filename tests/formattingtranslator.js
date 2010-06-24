@@ -17,9 +17,6 @@ new Test.Unit.Runner({
 	},
 
 	testPluralizerPluralize: function() {
-		var self = this;
-		var callCount = 0;
-
 		var p = new FormattingTranslator.Pluralizer(function(count) {
 			return Math.abs(Math.floor(count));
 		});
@@ -31,9 +28,6 @@ new Test.Unit.Runner({
 	},
 
 	testPluralizerPluralizeOutOfRangeThrows: function() {
-		var self = this;
-		var callCount = 0;
-
 		var p = new FormattingTranslator.Pluralizer(function(count) {
 			return count;
 		});
@@ -53,5 +47,20 @@ new Test.Unit.Runner({
 		this.assertRaise('Error', function() {
 			p.pluralize(-1, [ 'o', 'x' ]);
 		});
+	},
+
+	testPluralizerFormatter: function() {
+		var callCount = 0;
+
+		var p = new FormattingTranslator.Pluralizer(function(count) {
+			return Math.abs(Math.floor(count));
+		});
+
+		var f = p.formatter;
+
+		this.assertEqual('two', f(2, 'zero|one|two'));
+		this.assertEqual('zero', f(0, 'zero|one|two'));
+		this.assertEqual('one', f(-1, 'zero|one|two'));
+		this.assertEqual('two', f(2.999, 'zero|one|two'));
 	}
 });
