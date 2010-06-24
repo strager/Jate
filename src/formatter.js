@@ -33,12 +33,20 @@ function Formatter(placeholderFormatters) {
 		var parts = placeholder.match(/^([0-9]+)(.*)$/);
 
 		if(!parts) {
-			return null;
-			// FIXME Exception?
+			throw new Error('Bad placeholder format');
 		}
 
 		var index = parseInt(parts[1], 10);
-		var value = index === NaN || index > values.length ? undefined : values[index];
+
+		if(isNaN(index)) {
+			throw new Error('Bad index specified');
+		}
+
+		if(index < 0 || index >= values.length) {
+			throw new Error('Placeholder out of range');
+		}
+
+		var value = values[index];
 
 		var rest = parts[2];
 		var formatterName = this._getPlaceholderFormatterName(rest);
@@ -47,8 +55,7 @@ function Formatter(placeholderFormatters) {
 		var options = rest.substr(formatterName.length);
 
 		if(!formatter) {
-			return null;
-			// FIXME Exception?
+			throw new Error('No valid formatter');
 		}
 
 		return formatter.call(this, value, options);

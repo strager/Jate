@@ -43,11 +43,44 @@ new Test.Unit.Runner({
 		this.assertEqual('foo{0bar}', formatter.format('foo\\{0bar}'));
 	},
 
-	testNoPlaceholderFunctionReturnsNull: function() {
+	testNoPlaceholderFunctionThrows: function() {
 		var formatter = new Formatter();
 
-		this.assertEqual(null, formatter.formatPlaceholder('0', [ 'wootpoot' ]));
-		this.assertEqual(null, formatter.formatPlaceholder('2', [ 0, '9', { 'x': 'y' } ]));
+		this.assertRaise('Error', function() {
+			formatter.formatPlaceholder('0', [ 'wootpoot' ]);
+		});
+
+		this.assertRaise('Error', function() {
+			formatter.formatPlaceholder('2', [ 0, '9', { 'x': 'y' } ]);
+		});
+	},
+
+	testBadPlaceholderFormatThrows: function() {
+		var formatter = new Formatter({
+			'default': function() { }
+		});
+
+		this.assertRaise('Error', function() {
+			formatter.formatPlaceholder('x1');
+		});
+
+		this.assertRaise('Error', function() {
+			formatter.formatPlaceholder(' 5');
+		});
+	},
+
+	testOutOfRangePlaceholderThrows: function() {
+		var formatter = new Formatter({
+			'default': function() { }
+		});
+
+		this.assertRaise('Error', function() {
+			formatter.formatPlaceholder('0', [ ]);
+		});
+
+		this.assertRaise('Error', function() {
+			formatter.formatPlaceholder('2', [ 'foo', 546 ]);
+		});
 	},
 
 	testDefaultPlaceholderCallsDefaultOnce: function() {
@@ -59,7 +92,7 @@ new Test.Unit.Runner({
 			}
 		});
 
-		formatter.formatPlaceholder('0');
+		formatter.formatPlaceholder('0', [ 0 ]);
 
 		this.assertEqual(1, callCount);
 	},
@@ -85,7 +118,7 @@ new Test.Unit.Runner({
 			}
 		});
 
-		this.assertEqual('bar', formatter.formatPlaceholder('0'));
+		this.assertEqual('bar', formatter.formatPlaceholder('0', [ 0 ]));
 	},
 
 	testCustomPlaceholderCallsDefault: function() {
@@ -97,7 +130,7 @@ new Test.Unit.Runner({
 			}
 		});
 
-		formatter.formatPlaceholder('0fdf~w00t');
+		formatter.formatPlaceholder('0fdf~w00t', [ 0 ]);
 
 		this.assertEqual('fdf~w00t', callCustom);
 	},
@@ -111,7 +144,7 @@ new Test.Unit.Runner({
 			}
 		});
 
-		formatter.formatPlaceholder('0~');
+		formatter.formatPlaceholder('0~', [ 0 ]);
 
 		this.assertEqual(1, callCount);
 	},
@@ -125,7 +158,7 @@ new Test.Unit.Runner({
 			}
 		});
 
-		formatter.formatPlaceholder('0~@#$');
+		formatter.formatPlaceholder('0~@#$', [ 0 ]);
 
 		this.assertEqual(1, callCount);
 	},
@@ -148,7 +181,7 @@ new Test.Unit.Runner({
 			}
 		});
 
-		formatter.formatPlaceholder('0~@#$');
+		formatter.formatPlaceholder('0~@#$', [ 0 ]);
 
 		this.assertEqual(1, callCount);
 		this.assertEqual(0, badCallCount);
@@ -175,7 +208,7 @@ new Test.Unit.Runner({
 			}
 		});
 
-		this.assertEqual('bar', formatter.formatPlaceholder('0~'));
+		this.assertEqual('bar', formatter.formatPlaceholder('0~', [ 0 ]));
 	},
 
 	testStringFormat: function() {
