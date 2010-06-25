@@ -51,7 +51,7 @@
     for (i = 0; i < count; ++i) {
         scriptUri = scriptElements[i].getAttribute('src');
 
-        if (!scriptUri) {
+        if (!scriptUri || !scriptUri.match(/^src|^tests/)) {
             continue;
         }
 
