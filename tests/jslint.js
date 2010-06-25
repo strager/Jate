@@ -61,7 +61,7 @@
         tests[testName] = testFunc;
     }
 
-    window.test = new Test.Unit.Runner(tests);
+    test(tests);
 }({
     undef: true,
     nomen: true,

@@ -12,20 +12,24 @@
 
 <div id="content">
 
-  <div id="header">
-    <h1>Jate tests</h1>
-  </div>
+    <div id="header">
+        <h1>Jate tests</h1>
+    </div>
 
-  <div id="testlog"></div>
-  
-  <div id="sample">
-  </div>
-  
-  <pre id="jslint_log"></pre>
+    <div id="testlog"></div>
+
+    <div id="sample">
+    </div>
+
+    <pre id="jslint_log"></pre>
 </div>
 
 <script type="text/javascript">
 var Jate = { };
+
+function test(tests) {
+    new Test.Unit.Runner(tests);
+}
 </script>
 
 <!-- Add sources here -->

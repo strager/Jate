@@ -1,4 +1,4 @@
-test = new Test.Unit.Runner({
+test({
     testFormatRawStringReturnsSelf: function () {
         var formatter = new Jate.Formatter();
 

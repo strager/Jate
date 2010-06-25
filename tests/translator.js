@@ -1,4 +1,4 @@
-test = new Test.Unit.Runner({
+test({
     testNoTranslate: function () {
         var translator = new Jate.Translator();
 
