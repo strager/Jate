@@ -16,7 +16,7 @@ FormattingTranslator.Pluralizer = function(indexerFunction) {
 		}
 
 		return index;
-	};
+	}
 
 	function pluralize(count, parameters) {
 		var index = getIndex(count);
@@ -30,7 +30,7 @@ FormattingTranslator.Pluralizer = function(indexerFunction) {
 		}
 
 		return parameters[index];
-	};
+	}
 
 	function format(value, options) {
 		var parts = options.split(optionsDivider);

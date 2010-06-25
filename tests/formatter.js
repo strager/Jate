@@ -1,4 +1,4 @@
-new Test.Unit.Runner({
+test = new Test.Unit.Runner({
 	testFormatRawStringReturnsSelf: function() {
 		var formatter = new Formatter();
 
@@ -98,7 +98,7 @@ new Test.Unit.Runner({
 	},
 
 	testDefaultPlaceholderCallsDefaultWithValue: function() {
-		var callValue = undefined;
+		var callValue;
 
 		var formatter = new Formatter({
 			'default': function(value) {
@@ -122,7 +122,7 @@ new Test.Unit.Runner({
 	},
 
 	testCustomPlaceholderCallsDefault: function() {
-		var callCustom = undefined;
+		var callCustom;
 
 		var formatter = new Formatter({
 			'default': function(value, custom) {
@@ -188,7 +188,7 @@ new Test.Unit.Runner({
 	},
 
 	testCustomPlaceholderCallsCustomWithValue: function() {
-		var callValue = undefined;
+		var callValue;
 
 		var formatter = new Formatter({
 			'~': function(value) {

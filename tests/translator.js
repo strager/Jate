@@ -1,4 +1,4 @@
-new Test.Unit.Runner({
+test = new Test.Unit.Runner({
 	testNoTranslate: function() {
 		var translator = new Translator();
 
@@ -86,11 +86,11 @@ new Test.Unit.Runner({
 		var translator = new Translator();
 
 		this.assertRaise('Error', function() {
-			translator.addTranslation('source', 'c\00kies', 'traduction');
+			translator.addTranslation('source', 'c\x000kies', 'traduction');
 		});
 
 		this.assertRaise('Error', function() {
-			translator.addTranslation('s\0urce', 'c00kies', 'traduction');
+			translator.addTranslation('s\x00urce', 'c00kies', 'traduction');
 		});
 	}
 });

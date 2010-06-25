@@ -1,6 +1,6 @@
 function Translator(/* translations ... */) {
-	var sourcePrefix = '\0\0';
-	var sourceContextDivider = '\0';
+	var sourcePrefix = '\x00\x00';
+	var sourceContextDivider = '\x00';
 	var translations = { };
 
 	this.addTranslation = function(source, /* [context], */ translation) {
@@ -24,9 +24,11 @@ function Translator(/* translations ... */) {
 		var source, translation;
 
 		for(source in translations) {
-			translation = translations[source];
+			if(translations.hasOwnProperty(source)) {
+				translation = translations[source];
 
-			this.addTranslation(source, translation);
+				this.addTranslation(source, translation);
+			}
 		}
 	};
 

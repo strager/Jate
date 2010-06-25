@@ -1,8 +1,8 @@
 (function () {
-	function getScript(name) {
+	function getScript(uri) {
 		var xhr = new XMLHttpRequest();
 
-		xhr.open('GET', name, false);
+		xhr.open('GET', uri, false);
 		xhr.send(null);
 
 		return xhr.responseText;
@@ -18,32 +18,35 @@
 		}
 	}
 
+	function makeScriptTester(uri) {
+		return function () {
+			var success = JSLINT(getScript(uri));
+
+			if (!success) {
+				logErrors(uri, JSLINT.errors);
+
+				throw new Error('See JSLint logs');
+			}
+		};
+	}
+
 	var tests = { },
 		scriptElements = document.body.getElementsByTagName('script'),
 		count = scriptElements.length,
 		i,
+		scriptUri,
 		testName,
 		testFunc,
 		logElement = document.getElementById('jslint_log');
 
 	for (i = 0; i < count; ++i) {
-		testName = 'test JSLint ' + scriptElements[i].src;
+		scriptUri = scriptElements[i].src;
 
-		testFunc = (function (scriptElement) {
-			return function () {
-				var scriptName = scriptElement.src,
-					success = JSLINT(getScript(scriptName));
-
-				if (!success) {
-					logErrors(scriptName, JSLINT.errors);
-
-					throw new Error('See JSLint logs');
-				}
-			};
-		})(scriptElements[i]);
+		testName = 'test JSLint ' + scriptUri;
+		testFunc = makeScriptTester(scriptUri);
 
 		tests[testName] = testFunc;
 	}
 
-	new Test.Unit.Runner(tests);
+	window.test = new Test.Unit.Runner(tests);
 })();

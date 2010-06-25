@@ -1,4 +1,4 @@
-new Test.Unit.Runner({
+test = new Test.Unit.Runner({
 	testPluralizerGetIndexCallsCallback: function() {
 		var self = this;
 		var callCount = 0;
