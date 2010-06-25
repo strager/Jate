@@ -1,4 +1,13 @@
-(function () {
+(function (testOptions) {
+	var tests = { },
+		scriptElements = document.body.getElementsByTagName('script'),
+		count = scriptElements.length,
+		i,
+		scriptUri,
+		testName,
+		testFunc,
+		logElement = document.getElementById('jslint_log');
+
 	function getScript(uri) {
 		var xhr = new XMLHttpRequest();
 
@@ -19,8 +28,17 @@
 	}
 
 	function makeScriptTester(uri) {
+		// Other calls to JSLINT may modify the options object
+		var testOptionsCopy = { }, option;
+
+		for (option in testOptions) {
+			if (testOptions.hasOwnProperty(option)) {
+				testOptionsCopy[option] = testOptions[option];
+			}
+		}
+
 		return function () {
-			var success = JSLINT(getScript(uri));
+			var success = JSLINT(getScript(uri), testOptionsCopy);
 
 			if (!success) {
 				logErrors(uri, JSLINT.errors);
@@ -30,17 +48,12 @@
 		};
 	}
 
-	var tests = { },
-		scriptElements = document.body.getElementsByTagName('script'),
-		count = scriptElements.length,
-		i,
-		scriptUri,
-		testName,
-		testFunc,
-		logElement = document.getElementById('jslint_log');
-
 	for (i = 0; i < count; ++i) {
 		scriptUri = scriptElements[i].src;
+
+		if (!scriptUri) {
+			continue;
+		}
 
 		testName = 'test JSLint ' + scriptUri;
 		testFunc = makeScriptTester(scriptUri);
@@ -49,4 +62,19 @@
 	}
 
 	window.test = new Test.Unit.Runner(tests);
-})();
+}({
+	undef: true,
+	nomen: true,
+	eqeqeq: true,
+	bitwise: true,
+	newcap: true,
+	immed: true,
+	browser: true,
+	predef: [
+		'Test',
+		'test',
+		'Jate',
+		'window',
+		'JSLINT'
+	]
+}));

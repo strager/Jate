@@ -1,7 +1,21 @@
-function Formatter(placeholderFormatters) {
-	this.placeholderFormatters = placeholderFormatters || { };
+Jate.Formatter = function (placeholderFormatters) {
+	placeholderFormatters = placeholderFormatters || { };
 
-	this.format = function(text) {
+	function getPlaceholderFormatterName(rest) {
+		var i, name;
+
+		for(i = rest.length; i > 0; --i) {
+			name = rest.substr(0, i);
+
+			if(placeholderFormatters.hasOwnProperty(name)) {
+				return name;
+			}
+		}
+
+		return '';
+	}
+
+	function format(text) {
 		var values = [ ], i;
 		var self = this;
 
@@ -25,9 +39,9 @@ function Formatter(placeholderFormatters) {
 		var re = new RegExp('(^' + reString + '|(.)(' + reString + '))', 'g');
 
 		return text.replace(re, replacement);
-	};
+	}
 
-	this.formatPlaceholder = function(placeholder, values) {
+	function formatPlaceholder(placeholder, values) {
 		values = values || [ ];
 
 		var parts = placeholder.match(/^([0-9]+)(.*)$/);
@@ -49,8 +63,8 @@ function Formatter(placeholderFormatters) {
 		var value = values[index];
 
 		var rest = parts[2];
-		var formatterName = this._getPlaceholderFormatterName(rest);
-		var formatter = this.placeholderFormatters[formatterName || 'default'];
+		var formatterName = getPlaceholderFormatterName(rest);
+		var formatter = placeholderFormatters[formatterName || 'default'];
 
 		var options = rest.substr(formatterName.length);
 
@@ -58,25 +72,14 @@ function Formatter(placeholderFormatters) {
 			throw new Error('No valid formatter');
 		}
 
-		return formatter.call(this, value, options);
-	};
+		return formatter(value, options);
+	}
 
-	this._getPlaceholderFormatterName = function(rest) {
-		var i, name;
+	this.format = format;
+	this.formatPlaceholder = formatPlaceholder;
+};
 
-		for(i = rest.length; i > 0; --i) {
-			name = rest.substr(0, i);
-
-			if(this.placeholderFormatters.hasOwnProperty(name)) {
-				return name;
-			}
-		}
-
-		return '';
-	};
-}
-
-Formatter.placeholderFormatters = {
+Jate.Formatter.placeholderFormatters = {
 	string: function(value) {
 		return value.toString ? value.toString() : value + '';
 	},
@@ -111,4 +114,4 @@ Formatter.placeholderFormatters = {
 	}
 };
 
-Formatter.formats = Formatter.placeholderFormatters;
+Jate.Formatter.formats = Jate.Formatter.placeholderFormatters;

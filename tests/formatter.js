@@ -1,13 +1,13 @@
 test = new Test.Unit.Runner({
 	testFormatRawStringReturnsSelf: function() {
-		var formatter = new Formatter();
+		var formatter = new Jate.Formatter();
 
 		this.assertEqual('foo', formatter.format('foo'));
 		this.assertEqual('{b0ar}x!@$!05', formatter.format('{b0ar}x!@$!05', '99999'));
 	},
 
 	testFormatDefault: function() {
-		var formatter = new Formatter({
+		var formatter = new Jate.Formatter({
 			'default': function(value) {
 				return value.toString ? value.toString() : value + '';
 			}
@@ -19,7 +19,7 @@ test = new Test.Unit.Runner({
 	},
 
 	testFormatCustom: function() {
-		var formatter = new Formatter({
+		var formatter = new Jate.Formatter({
 			'$': function(value) {
 				return value.toFixed(2);
 			},
@@ -38,13 +38,13 @@ test = new Test.Unit.Runner({
 	},
 
 	testFormatEscape: function() {
-		var formatter = new Formatter();
+		var formatter = new Jate.Formatter();
 
 		this.assertEqual('foo{0bar}', formatter.format('foo\\{0bar}'));
 	},
 
 	testNoPlaceholderFunctionThrows: function() {
-		var formatter = new Formatter();
+		var formatter = new Jate.Formatter();
 
 		this.assertRaise('Error', function() {
 			formatter.formatPlaceholder('0', [ 'wootpoot' ]);
@@ -56,7 +56,7 @@ test = new Test.Unit.Runner({
 	},
 
 	testBadPlaceholderFormatThrows: function() {
-		var formatter = new Formatter({
+		var formatter = new Jate.Formatter({
 			'default': function() { }
 		});
 
@@ -70,7 +70,7 @@ test = new Test.Unit.Runner({
 	},
 
 	testOutOfRangePlaceholderThrows: function() {
-		var formatter = new Formatter({
+		var formatter = new Jate.Formatter({
 			'default': function() { }
 		});
 
@@ -86,7 +86,7 @@ test = new Test.Unit.Runner({
 	testDefaultPlaceholderCallsDefaultOnce: function() {
 		var callCount = 0;
 
-		var formatter = new Formatter({
+		var formatter = new Jate.Formatter({
 			'default': function(value) {
 				++callCount;
 			}
@@ -100,7 +100,7 @@ test = new Test.Unit.Runner({
 	testDefaultPlaceholderCallsDefaultWithValue: function() {
 		var callValue;
 
-		var formatter = new Formatter({
+		var formatter = new Jate.Formatter({
 			'default': function(value) {
 				callValue = value;
 			}
@@ -112,7 +112,7 @@ test = new Test.Unit.Runner({
 	},
 
 	testDefaultPlaceholderUsesReturnValue: function() {
-		var formatter = new Formatter({
+		var formatter = new Jate.Formatter({
 			'default': function(value) {
 				return 'bar';
 			}
@@ -124,7 +124,7 @@ test = new Test.Unit.Runner({
 	testCustomPlaceholderCallsDefault: function() {
 		var callCustom;
 
-		var formatter = new Formatter({
+		var formatter = new Jate.Formatter({
 			'default': function(value, custom) {
 				callCustom = custom;
 			}
@@ -138,7 +138,7 @@ test = new Test.Unit.Runner({
 	testCustomPlaceholderCallsCustomOnce: function() {
 		var callCount = 0;
 
-		var formatter = new Formatter({
+		var formatter = new Jate.Formatter({
 			'~': function(value) {
 				++callCount;
 			}
@@ -152,7 +152,7 @@ test = new Test.Unit.Runner({
 	testExtendedCustomPlaceholderCallsCustomOnce: function() {
 		var callCount = 0;
 
-		var formatter = new Formatter({
+		var formatter = new Jate.Formatter({
 			'~': function(value) {
 				++callCount;
 			}
@@ -167,7 +167,7 @@ test = new Test.Unit.Runner({
 		var callCount = 0;
 		var badCallCount = 0;
 
-		var formatter = new Formatter({
+		var formatter = new Jate.Formatter({
 			'default': function(value) {
 				++badCallCount;
 			},
@@ -190,7 +190,7 @@ test = new Test.Unit.Runner({
 	testCustomPlaceholderCallsCustomWithValue: function() {
 		var callValue;
 
-		var formatter = new Formatter({
+		var formatter = new Jate.Formatter({
 			'~': function(value) {
 				callValue = value;
 			}
@@ -202,7 +202,7 @@ test = new Test.Unit.Runner({
 	},
 
 	testCustomPlaceholderUsesCustomReturnValue: function() {
-		var formatter = new Formatter({
+		var formatter = new Jate.Formatter({
 			'~': function(value) {
 				return 'bar';
 			}
@@ -212,9 +212,9 @@ test = new Test.Unit.Runner({
 	},
 
 	testStringFormat: function() {
-		this.assertEqual('fsdf$', Formatter.formats.string('fsdf$'));
-		this.assertEqual('5451', Formatter.formats.string(5451));
-		this.assertEqual('poo', Formatter.formats.string({
+		this.assertEqual('fsdf$', Jate.Formatter.formats.string('fsdf$'));
+		this.assertEqual('5451', Jate.Formatter.formats.string(5451));
+		this.assertEqual('poo', Jate.Formatter.formats.string({
 			toString: function() {
 				return 'poo';
 			}
@@ -222,14 +222,14 @@ test = new Test.Unit.Runner({
 	},
 
 	testNumberFormat: function() {
-		this.assertEqual('54678', Formatter.formats.number(54678));
-		this.assertEqual('     54678', Formatter.formats.number(54678, '10.'));
-		this.assertEqual('0000054678', Formatter.formats.number(54678, '010.'));
-		this.assertEqual('54.678', Formatter.formats.number(54.678));
-		this.assertEqual('54.68', Formatter.formats.number(54.678, '.2'));
-		this.assertEqual('  54.68', Formatter.formats.number(54.678, '4.2'));
-		this.assertEqual('  54.678', Formatter.formats.number(54.678, '4.'));
-		this.assertEqual('0054.68', Formatter.formats.number(54.678, '04.2'));
-		this.assertEqual('0054.678', Formatter.formats.number(54.678, '04.'));
+		this.assertEqual('54678', Jate.Formatter.formats.number(54678));
+		this.assertEqual('     54678', Jate.Formatter.formats.number(54678, '10.'));
+		this.assertEqual('0000054678', Jate.Formatter.formats.number(54678, '010.'));
+		this.assertEqual('54.678', Jate.Formatter.formats.number(54.678));
+		this.assertEqual('54.68', Jate.Formatter.formats.number(54.678, '.2'));
+		this.assertEqual('  54.68', Jate.Formatter.formats.number(54.678, '4.2'));
+		this.assertEqual('  54.678', Jate.Formatter.formats.number(54.678, '4.'));
+		this.assertEqual('0054.68', Jate.Formatter.formats.number(54.678, '04.2'));
+		this.assertEqual('0054.678', Jate.Formatter.formats.number(54.678, '04.'));
 	}
 });

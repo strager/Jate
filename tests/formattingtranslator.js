@@ -3,7 +3,7 @@ test = new Test.Unit.Runner({
 		var self = this;
 		var callCount = 0;
 
-		var p = new FormattingTranslator.Pluralizer(function(count) {
+		var p = new Jate.FormattingTranslator.Pluralizer(function(count) {
 			++callCount;
 
 			self.assertEqual(42, count);
@@ -17,7 +17,7 @@ test = new Test.Unit.Runner({
 	},
 
 	testPluralizerPluralize: function() {
-		var p = new FormattingTranslator.Pluralizer(function(count) {
+		var p = new Jate.FormattingTranslator.Pluralizer(function(count) {
 			return Math.abs(Math.floor(count));
 		});
 
@@ -28,7 +28,7 @@ test = new Test.Unit.Runner({
 	},
 
 	testPluralizerPluralizeOutOfRangeThrows: function() {
-		var p = new FormattingTranslator.Pluralizer(function(count) {
+		var p = new Jate.FormattingTranslator.Pluralizer(function(count) {
 			return count;
 		});
 
@@ -52,7 +52,7 @@ test = new Test.Unit.Runner({
 	testPluralizerFormatter: function() {
 		var callCount = 0;
 
-		var p = new FormattingTranslator.Pluralizer(function(count) {
+		var p = new Jate.FormattingTranslator.Pluralizer(function(count) {
 			return Math.abs(Math.floor(count));
 		});
 

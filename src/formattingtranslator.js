@@ -1,7 +1,7 @@
-function FormattingTranslator() {
-}
+Jate.FormattingTranslator = function() {
+};
 
-FormattingTranslator.Pluralizer = function(indexerFunction) {
+Jate.FormattingTranslator.Pluralizer = function(indexerFunction) {
 	var optionsDivider = '|';
 
 	function getIndex(count) {

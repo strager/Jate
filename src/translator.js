@@ -1,7 +1,11 @@
-function Translator(/* translations ... */) {
+Jate.Translator = function(/* translations ... */) {
 	var sourcePrefix = '\x00\x00';
 	var sourceContextDivider = '\x00';
 	var translations = { };
+
+	function getKeyFromSourceContext(source, context) {
+		return sourcePrefix + source + (context ? sourceContextDivider + context : '');
+	}
 
 	this.addTranslation = function(source, /* [context], */ translation) {
 		var context, key;
@@ -47,8 +51,4 @@ function Translator(/* translations ... */) {
 
 		return text;
 	};
-
-	function getKeyFromSourceContext(source, context) {
-		return sourcePrefix + source + (context ? sourceContextDivider + context : '');
-	}
-}
+};

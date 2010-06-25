@@ -1,13 +1,13 @@
 test = new Test.Unit.Runner({
 	testNoTranslate: function() {
-		var translator = new Translator();
+		var translator = new Jate.Translator();
 
 		this.assertEqual('foobar is cool', translator.translate('foobar is cool'));
 		this.assertEqual('{0}, {1}', translator.translate('{0}, {1}'));
 	},
 
 	testConstructorMapping: function() {
-		var translator = new Translator({
+		var translator = new Jate.Translator({
 			'foobar is very cool': 'foobar est trés cool',
 			'{0} {1}': '{1}, {0}'
 		});
@@ -17,7 +17,7 @@ test = new Test.Unit.Runner({
 	},
 
 	testAddTranslationToEmpty: function() {
-		var translator = new Translator();
+		var translator = new Jate.Translator();
 
 		translator.addTranslation('foobar is very cool', 'foobar est trés cool');
 
@@ -26,7 +26,7 @@ test = new Test.Unit.Runner({
 	},
 
 	testAddTranslationsToEmpty: function() {
-		var translator = new Translator();
+		var translator = new Jate.Translator();
 
 		translator.addTranslations({
 			'foobar is very cool': 'foobar est trés cool',
@@ -38,7 +38,7 @@ test = new Test.Unit.Runner({
 	},
 
 	testAddTranslationToExistingReplaces: function() {
-		var translator = new Translator();
+		var translator = new Jate.Translator();
 
 		translator.addTranslation('foobar is very cool', 'foobar n\'est pas cool');
 		translator.addTranslation('foobar is very cool', 'foobar est trés cool');
@@ -48,7 +48,7 @@ test = new Test.Unit.Runner({
 	},
 
 	testAddTranslationsToExistingReplaces: function() {
-		var translator = new Translator();
+		var translator = new Jate.Translator();
 
 		translator.addTranslations({
 			'foobar is very cool': 'foobar est si cool, n\'est-ce pas?',
@@ -65,7 +65,7 @@ test = new Test.Unit.Runner({
 	},
 
 	testAddContextualTranslationCoexistsWithExisting: function() {
-		var translator = new Translator();
+		var translator = new Jate.Translator();
 
 		translator.addTranslation('source', 'origin');
 		translator.addTranslation('source', 'context', 'traduction');
@@ -75,7 +75,7 @@ test = new Test.Unit.Runner({
 	},
 
 	testAddContextualTranslationDoesNotAddNoContext: function() {
-		var translator = new Translator();
+		var translator = new Jate.Translator();
 
 		translator.addTranslation('source', 'context', 'traduction');
 
@@ -83,7 +83,7 @@ test = new Test.Unit.Runner({
 	},
 
 	testAddContextualTranslationWithNullCharThrows: function() {
-		var translator = new Translator();
+		var translator = new Jate.Translator();
 
 		this.assertRaise('Error', function() {
 			translator.addTranslation('source', 'c\x000kies', 'traduction');
