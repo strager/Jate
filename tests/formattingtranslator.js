@@ -62,5 +62,13 @@ test({
         this.assertEqual('zero', f(0, 'zero|one|two'));
         this.assertEqual('one', f(-1, 'zero|one|two'));
         this.assertEqual('two', f(2.999, 'zero|one|two'));
+    },
+
+    testDateFormatterDefault: function () {
+        var formatter;
+
+        formatter = new Jate.DateFormatter('c');
+
+        this.assertEqual('2004-02-12T15:19:21+00:00', formatter.formatter(new Jate.UDate(2004, 2, 12, 15, 19, 21)));
     }
 });

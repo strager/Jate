@@ -73,3 +73,207 @@ Jate.UDate.prototype.normalized = function () {
         this.utcOffset
     );
 };
+
+// Adopted from Jacob Wright's original code:
+// http://jacwright.com/projects/javascript/date_format
+// Simulates PHP's date function; see http://php.net/manual/en/function.date.php
+Jate.UDate.prototype.format = function (format, translator) {
+    var func = arguments.callee,
+        replacements = func.replaceChars,
+        returnStr = '',
+        i, curChar;
+
+    translator = translator || function (x) {
+        return x;
+    };
+
+    for (i = 0; i < format.length; i++) {
+        curChar = format.charAt(i);
+
+        if (replacements.hasOwnProperty(curChar)) {
+            returnStr += replacements[curChar].call(this, translator);
+        } else {
+            returnStr += curChar;
+        }
+    }
+
+    return returnStr;
+};
+
+(function () {
+    function pad(number, amount) {
+        if (typeof amount === 'undefined') {
+            amount = 2;
+        }
+
+        var ret = '' + number;
+
+        while (ret.length < amount) {
+            ret = '0' + ret;
+        }
+
+        return ret;
+    }
+
+    var r = Jate.UDate.prototype.format.replaceChars = {
+        shortMonths: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        longMonths: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        shortDays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+        longDays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+        
+        // Day
+        d: function () {
+            return pad(this.day);
+        },
+
+        D: function (t) {
+            return t(r.shortDays[this.getDayOfWeek()]);
+        },
+
+        j: function () {
+            return this.day;
+        },
+
+        l: function (t) {
+            return t(r.longDays[this.getDayOfWeek()]);
+        },
+
+        N: function () {
+            return this.getDayOfWeek() + 1;
+        },
+
+        //S: function () {
+        //    return (this.date % 10 == 1 && this.date != 11 ? 'st' : (this.date % 10 == 2 && this.date != 12 ? 'nd' : (this.date % 10 == 3 && this.date != 13 ? 'rd' : 'th')));
+        //},
+
+        w: function () {
+            return this.getDayOfWeek();
+        },
+
+        z: function () {
+            return "Not Yet Supported";
+        },
+
+        // Week
+        W: function () {
+            return "Not Yet Supported";
+        },
+
+        // Month
+        F: function (t) {
+            return t(r.longMonths[this.month]);
+        },
+
+        m: function () {
+            return pad(this.month);
+        },
+
+        M: function (t, r) {
+            return t(r.shortMonths[this.month]);
+        },
+
+        n: function () {
+            return this.month + 1;
+        },
+
+        t: function () {
+            return "Not Yet Supported";
+        },
+
+        // Year
+        L: function () {
+            return (((this.fullYear % 4 === 0) && (this.fullYear % 100 !== 0)) || (this.fullYear % 400 === 0)) ? '1' : '0';
+        },
+
+        o: function () {
+            return "Not Supported";
+        },
+
+        Y: function () {
+            return this.year;
+        },
+
+        y: function () {
+            return pad(this.year % 100);
+        },
+
+        // Time
+        a: function (t) {
+            return t(this.hour < 12 ? 'am' : 'pm');
+        },
+
+        A: function (t) {
+            return t(this.hour < 12 ? 'AM' : 'PM');
+        },
+
+        B: function () {
+            return "Not Yet Supported";
+        },
+
+        g: function () {
+            return this.hour % 12 || 12;
+        },
+
+        G: function () {
+            return this.hour;
+        },
+
+        h: function (t) {
+            return pad(r.g(t));
+        },
+
+        H: function () {
+            return pad(this.hour);
+        },
+
+        i: function () {
+            return pad(this.minute);
+        },
+
+        s: function () {
+            return pad(this.second);
+        },
+
+        // Timezone
+        e: function () {
+            return "Not Yet Supported";
+        },
+
+        I: function () {
+            return "Not Supported";
+        },
+
+        O: function () {
+            return (-this.utcOffset < 0 ? '-' : '+') + (Math.abs(this.utcOffset / 60) < 10 ? '0' : '') + (Math.abs(this.utcOffset / 60)) + '00';
+        },
+
+        P: function () {
+            return (-this.utcOffset < 0 ? '-' : '+') + (Math.abs(this.utcOffset / 60) < 10 ? '0' : '') + (Math.abs(this.utcOffset / 60)) + ':' + (Math.abs(this.utcOffset % 60) < 10 ? '0' : '') + (Math.abs(this.utcOffset % 60));
+        },
+
+        T: function () {
+            var m = this.month;
+            this.setMonth(0);
+            var result = this.toTimeString().replace(/^.+ \(?([^\)]+)\)?$/, '$1');
+            this.setMonth(m);
+            return result;
+        },
+
+        Z: function () {
+            return -this.utcOffset * 60;
+        },
+
+        // Full Date/Time
+        c: function () {
+            return this.format("Y-m-d") + "T" + this.format("H:i:sP");
+        },
+
+        r: function () {
+            return this.toString();
+        },
+
+        U: function () {
+            return this.time / 1000;
+        }
+    };
+}());

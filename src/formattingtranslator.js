@@ -42,3 +42,13 @@ Jate.FormattingTranslator.Pluralizer = function (indexerFunction) {
     this.pluralize = pluralize;
     this.formatter = format;
 };
+
+Jate.DateFormatter = function (defaultFormat) {
+    function format(value, options) {
+        var dateFormat = defaultFormat;
+
+        return value.format(dateFormat);
+    }
+
+    this.formatter = format;
+};
