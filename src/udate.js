@@ -85,6 +85,10 @@ Jate.UDate.prototype.toUnixTime = function () {
     ) / 1000;
 };
 
+Jate.UDate.prototype.toDate = function () {
+    return new Date(this.toUnixTime() * 1000);
+};
+
 Jate.UDate.prototype.normalized = function () {
     var tempDate = new Date(Date.UTC(
         this.year,
@@ -106,6 +110,69 @@ Jate.UDate.prototype.normalized = function () {
         tempDate.getUTCMilliseconds(),
         this.utcOffset
     );
+};
+
+Jate.UDate.isLeapYear = function (year) {
+    return (year % 4 === 0 && year % 100 !== 0) ||
+           (year % 400 === 0);
+};
+
+Jate.UDate.prototype.isLeapYear = function () {
+    return Jate.UDate.isLeapYear(this.year);
+};
+
+Jate.UDate.getDaysInMonth = function (month, year /* or isLeapYear */) {
+    var isLeapYear;
+
+    if (typeof year === 'Number') {
+        isLeapYear = Jate.UDate.isLeapYear(year);
+    } else {
+        isLeapYear = !!year;
+    }
+
+    var daysPerMonth = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
+    var daysPerMonthLeap = [ 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
+
+    if (isLeapYear) {
+        return daysPerMonthLeap[month];
+    } else {
+        return daysPerMonth[month];
+    }
+};
+
+Jate.UDate.prototype.getDaysInMonth = function () {
+    return Jate.UDate.getDaysInMonth(this.month, this.year);
+};
+
+Jate.UDate.getDayOfYear = function (day, month, year) {
+    var curMonth;
+
+    for (curMonth = 0; curMonth < month; ++curMonth) {
+        day += Jate.UDate.getDaysInMonth(curMonth, year);
+    }
+
+    return day - 1;
+};
+
+Jate.UDate.prototype.getDayOfYear = function () {
+    return Jate.UDate.getDayOfYear(this.day, this.month, this.year);
+};
+
+Jate.UDate.prototype.getDayOfWeek = function () {
+    return this.toDate().getUTCDay();
+};
+
+Jate.UDate.prototype.getWeekOfYear = function () {
+    var a, b, isoDayOfWeek = this.getDayOfWeek();
+
+    if (isoDayOfWeek === 0) {
+        isoDayOfWeek = 7;
+    }
+
+    a = (new Jate.UDate(this.year, this.month, this.day - isoDayOfWeek + 4)).normalized();
+    b = (new Jate.UDate(a.year, 0, 4)).normalized();
+
+    return 1 + Math.round((a.toUnixTime() - b.toUnixTime()) / 864e2 / 7);
 };
 
 // Adopted from Jacob Wright's original code:
@@ -197,7 +264,9 @@ Jate.UDate.prototype.format = function (format, translator) {
         z: null,
 
         // Week
-        W: null,
+        W: function () {
+            return this.getWeekOfYear();
+        },
 
         // Month
         F: function (t) {
@@ -205,7 +274,7 @@ Jate.UDate.prototype.format = function (format, translator) {
         },
 
         m: function () {
-            return pad(this.month);
+            return pad(this.month + 1);
         },
 
         M: function (t, r) {
@@ -216,14 +285,27 @@ Jate.UDate.prototype.format = function (format, translator) {
             return this.month + 1;
         },
 
-        t: null,
+        t: function () {
+            return this.getDaysInMonth();
+        },
 
         // Year
         L: function () {
-            return (((this.fullYear % 4 === 0) && (this.fullYear % 100 !== 0)) || (this.fullYear % 400 === 0)) ? '1' : '0';
+            return this.isLeapYear() ? '1' : '0';
         },
 
-        o: null,
+        o: function () {
+            var weekOfYear = this.getWeekOfYear();
+            var year = this.year;
+
+            if (this.month === 11 && weekOfYear < 9) {
+                --year;
+            } else if (this.month === 0 && weekOfYear > 9) {
+                ++year;
+            }
+
+            return year;
+        },
 
         Y: function () {
             return this.year;
@@ -242,7 +324,9 @@ Jate.UDate.prototype.format = function (format, translator) {
             return t(this.hour < 12 ? 'AM' : 'PM');
         },
 
-        B: null,
+        B: function () {
+            return pad(Math.floor((((this.hour * 60) + this.minute) * 60 + this.second) / 86.4) % 1000, 3);
+        },
 
         g: function () {
             return this.hour % 12 || 12;
@@ -297,7 +381,7 @@ Jate.UDate.prototype.format = function (format, translator) {
         },
 
         U: function () {
-            return this.time / 1000;
+            return Math.floor(this.toUnixTime());
         }
     };
 }());

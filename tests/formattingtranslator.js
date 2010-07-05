@@ -69,6 +69,6 @@ test({
 
         formatter = new Jate.DateFormatter('c');
 
-        this.assertEqual('2004-02-12T15:19:21+00:00', formatter.formatter(new Jate.UDate(2004, 2, 12, 15, 19, 21)));
+        this.assertEqual('2004-03-12T15:19:21+00:00', formatter.formatter(new Jate.UDate(2004, 2, 12, 15, 19, 21)));
     }
 });

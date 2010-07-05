@@ -186,9 +186,27 @@
             }).toUnixTime());
         },
 
+        testGetDayOfWeek: function () {
+            this.assertEqual(1, (new Jate.UDate.FromUnixTime(1062419200)).getDayOfWeek());
+            this.assertEqual(2, (new Jate.UDate.FromUnixTime(1062505600)).getDayOfWeek());
+            this.assertEqual(3, (new Jate.UDate.FromUnixTime(1062592000)).getDayOfWeek());
+            this.assertEqual(4, (new Jate.UDate.FromUnixTime(1062678400)).getDayOfWeek());
+            this.assertEqual(5, (new Jate.UDate.FromUnixTime(1062764800)).getDayOfWeek());
+            this.assertEqual(6, (new Jate.UDate.FromUnixTime(1062851200)).getDayOfWeek());
+            this.assertEqual(0, (new Jate.UDate.FromUnixTime(1062937600)).getDayOfWeek());
+        },
+
         testFormat: function () {
-            this.assertEqual('2004-02-12T15:19:21+00:00', (new Jate.UDate(2004, 2, 12, 15, 19, 21)).format('c'));
-            this.assertEqual('07:08:40 m is month', (new Jate.UDate.FromUnixTime(1062402400)).toUtc().format('H:m:s \\m \\i\\s \\m\\o\\n\\t\\h'));
+            this.assertEqual('2004-03-12T15:19:21+00:00', (new Jate.UDate(2004, 2, 12, 15, 19, 21)).format('c'));
+            this.assertEqual('07:09:40 m is month', (new Jate.UDate.FromUnixTime(1062402400)).format('H:m:s \\m \\i\\s \\m\\o\\n\\t\\h'));
+            this.assertEqual('September 2, 2003, 12:26 am', (new Jate.UDate.FromUnixTime(1062462400)).format('F j, Y, g:i a'));
+            this.assertEqual('2003 36 2003', (new Jate.UDate.FromUnixTime(1062462400)).format('Y W o'));
+            this.assertEqual('53', (new Jate.UDate.FromUnixTime(1104534000)).format('W'));
+            this.assertEqual('53', (new Jate.UDate.FromUnixTime(1104620400)).format('W'));
+            this.assertEqual('999 31', (new Jate.UDate.FromUnixTime(1104537599)).format('B t'));
+            this.assertEqual('52 1293750000', (new Jate.UDate.FromUnixTime(1293750000.82)).format('W U'));
+            this.assertEqual('52', (new Jate.UDate.FromUnixTime(1293836400)).format('W'));
+            this.assertEqual('52 2011-01-02', (new Jate.UDate.FromUnixTime(1293974054)).format('W Y-m-d'));
         }
     });
 }());
