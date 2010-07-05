@@ -129,6 +129,10 @@ Jate.UDate.prototype.format = function (format, translator) {
             curChar = format.charAt(i);
             returnStr += curChar;
         } else if (replacements.hasOwnProperty(curChar)) {
+            if (typeof replacements[curChar] !== 'function') {
+                throw new Error('Unsupported format character: ' + curChar);
+            }
+
             returnStr += replacements[curChar].call(this, translator);
         } else {
             returnStr += curChar;
@@ -184,18 +188,16 @@ Jate.UDate.prototype.format = function (format, translator) {
         //    return (this.date % 10 == 1 && this.date != 11 ? 'st' : (this.date % 10 == 2 && this.date != 12 ? 'nd' : (this.date % 10 == 3 && this.date != 13 ? 'rd' : 'th')));
         //},
 
+        S: null,
+
         w: function () {
             return this.getDayOfWeek();
         },
 
-        z: function () {
-            return "Not Yet Supported";
-        },
+        z: null,
 
         // Week
-        W: function () {
-            return "Not Yet Supported";
-        },
+        W: null,
 
         // Month
         F: function (t) {
@@ -214,18 +216,14 @@ Jate.UDate.prototype.format = function (format, translator) {
             return this.month + 1;
         },
 
-        t: function () {
-            return "Not Yet Supported";
-        },
+        t: null,
 
         // Year
         L: function () {
             return (((this.fullYear % 4 === 0) && (this.fullYear % 100 !== 0)) || (this.fullYear % 400 === 0)) ? '1' : '0';
         },
 
-        o: function () {
-            return "Not Supported";
-        },
+        o: null,
 
         Y: function () {
             return this.year;
@@ -244,9 +242,7 @@ Jate.UDate.prototype.format = function (format, translator) {
             return t(this.hour < 12 ? 'AM' : 'PM');
         },
 
-        B: function () {
-            return "Not Yet Supported";
-        },
+        B: null,
 
         g: function () {
             return this.hour % 12 || 12;
@@ -273,13 +269,9 @@ Jate.UDate.prototype.format = function (format, translator) {
         },
 
         // Timezone
-        e: function () {
-            return "Not Yet Supported";
-        },
+        e: null,
 
-        I: function () {
-            return "Not Supported";
-        },
+        I: null,
 
         O: function () {
             return (-this.utcOffset < 0 ? '-' : '+') + (Math.abs(this.utcOffset / 60) < 10 ? '0' : '') + (Math.abs(this.utcOffset / 60)) + '00';
@@ -289,13 +281,7 @@ Jate.UDate.prototype.format = function (format, translator) {
             return (-this.utcOffset < 0 ? '-' : '+') + (Math.abs(this.utcOffset / 60) < 10 ? '0' : '') + (Math.abs(this.utcOffset / 60)) + ':' + (Math.abs(this.utcOffset % 60) < 10 ? '0' : '') + (Math.abs(this.utcOffset % 60));
         },
 
-        T: function () {
-            var m = this.month;
-            this.setMonth(0);
-            var result = this.toTimeString().replace(/^.+ \(?([^\)]+)\)?$/, '$1');
-            this.setMonth(m);
-            return result;
-        },
+        T: null,
 
         Z: function () {
             return -this.utcOffset * 60;
