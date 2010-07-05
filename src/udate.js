@@ -33,12 +33,26 @@ Jate.UDate.FromDate = function (date) {
         'minute': date.getMinutes(),
         'second': date.getSeconds(),
         'millisecond': date.getMilliseconds(),
-        'utcOffset': date.getTimezoneOffset()
+        'utcOffset': -date.getTimezoneOffset()
     });
 };
 
+Jate.UDate.FromDate.prototype = Jate.UDate.prototype;
+
+Jate.UDate.FromUnixTime = function (unixTime) {
+    var date = new Date(unixTime * 1000);
+
+    Jate.UDate.FromDate.call(this, date);
+};
+
+Jate.UDate.FromUnixTime.prototype = Jate.UDate.prototype;
+
 Jate.UDate.prototype.toLocal = function () {
     return this.toTimezone(Date.getTimezoneOffset());
+};
+
+Jate.UDate.prototype.toUtc = function () {
+    return this.toTimezone(0);
 };
 
 Jate.UDate.prototype.toTimezone = function (utcOffset) {
@@ -87,10 +101,14 @@ Jate.UDate.prototype.format = function (format, translator) {
         return x;
     };
 
-    for (i = 0; i < format.length; i++) {
+    for (i = 0; i < format.length; ++i) {
         curChar = format.charAt(i);
 
-        if (replacements.hasOwnProperty(curChar)) {
+        if (curChar === '\\') {
+            ++i;
+            curChar = format.charAt(i);
+            returnStr += curChar;
+        } else if (replacements.hasOwnProperty(curChar)) {
             returnStr += replacements[curChar].call(this, translator);
         } else {
             returnStr += curChar;

@@ -136,6 +136,35 @@
                 -1,
                 0
             ).normalized());
+        },
+
+        testFromUnixTime: function () {
+            assertHasFieldsSet.call(this, {
+                'year': 2003,
+                'month': 8,
+                'day': 1,
+                'hour': 7,
+                'minute': 46,
+                'second': 40,
+                'millisecond': 0,
+                'utcOffset': 0
+            }, new Jate.UDate.FromUnixTime(1062402400).toUtc());
+
+            assertHasFieldsSet.call(this, {
+                'year': 2010,
+                'month': 11,
+                'day': 30,
+                'hour': 23,
+                'minute': 0,
+                'second': 0,
+                'millisecond': 820,
+                'utcOffset': 0
+            }, new Jate.UDate.FromUnixTime(1293750000.82).toUtc());
+        },
+
+        testFormat: function () {
+            this.assertEqual('2004-02-12T15:19:21+00:00', (new Jate.UDate(2004, 2, 12, 15, 19, 21)).format('c'));
+            this.assertEqual('07:08:40 m is month', (new Jate.UDate.FromUnixTime(1062402400)).toUtc().format('H:m:s \\m \\i\\s \\m\\o\\n\\t\\h'));
         }
     });
 }());
