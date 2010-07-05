@@ -54,7 +54,7 @@ Jate.UDate.FromUnixTime = function (unixTime) {
 Jate.UDate.FromUnixTime.prototype = Jate.UDate.prototype;
 
 Jate.UDate.prototype.toLocal = function () {
-    return this.toTimezone(Date.getTimezoneOffset());
+    return this.toTimezone(-Date.getTimezoneOffset());
 };
 
 Jate.UDate.prototype.toUtc = function () {
@@ -124,7 +124,7 @@ Jate.UDate.prototype.isLeapYear = function () {
 Jate.UDate.getDaysInMonth = function (month, year /* or isLeapYear */) {
     var isLeapYear;
 
-    if (typeof year === 'Number') {
+    if (typeof year === 'number') {
         isLeapYear = Jate.UDate.isLeapYear(year);
     } else {
         isLeapYear = !!year;
@@ -248,24 +248,26 @@ Jate.UDate.prototype.format = function (format, translator) {
         },
 
         N: function () {
-            return this.getDayOfWeek() + 1;
+            var dayOfWeek = this.getDayOfWeek();
+
+            return dayOfWeek === 0 ? 7 : dayOfWeek;
         },
 
-        //S: function () {
-        //    return (this.date % 10 == 1 && this.date != 11 ? 'st' : (this.date % 10 == 2 && this.date != 12 ? 'nd' : (this.date % 10 == 3 && this.date != 13 ? 'rd' : 'th')));
-        //},
-
-        S: null,
+        S: function (t) {
+            return t('{0ord}', this.date);
+        },
 
         w: function () {
             return this.getDayOfWeek();
         },
 
-        z: null,
+        z: function () {
+            return this.getDayOfYear();
+        },
 
         // Week
         W: function () {
-            return this.getWeekOfYear();
+            return pad(this.getWeekOfYear());
         },
 
         // Month
@@ -277,7 +279,7 @@ Jate.UDate.prototype.format = function (format, translator) {
             return pad(this.month + 1);
         },
 
-        M: function (t, r) {
+        M: function (t) {
             return t(r.shortMonths[this.month]);
         },
 
@@ -325,7 +327,10 @@ Jate.UDate.prototype.format = function (format, translator) {
         },
 
         B: function () {
-            return pad(Math.floor((((this.hour * 60) + this.minute) * 60 + this.second) / 86.4) % 1000, 3);
+            var date = this.toTimezone(1 * 60);
+            var raw = (((date.second / 60) + date.minute) / 60 + date.hour) / 24;
+
+            return pad(Math.floor(raw * 1000), 3);
         },
 
         g: function () {
@@ -337,7 +342,7 @@ Jate.UDate.prototype.format = function (format, translator) {
         },
 
         h: function (t) {
-            return pad(r.g(t));
+            return pad(r.g.call(this, t));
         },
 
         H: function () {
@@ -357,27 +362,29 @@ Jate.UDate.prototype.format = function (format, translator) {
 
         I: null,
 
-        O: function () {
-            return (-this.utcOffset < 0 ? '-' : '+') + (Math.abs(this.utcOffset / 60) < 10 ? '0' : '') + (Math.abs(this.utcOffset / 60)) + '00';
+        O: function (t) {
+            return r.P.call(this, t).replace(/:/, '');
         },
 
         P: function () {
-            return (-this.utcOffset < 0 ? '-' : '+') + (Math.abs(this.utcOffset / 60) < 10 ? '0' : '') + (Math.abs(this.utcOffset / 60)) + ':' + (Math.abs(this.utcOffset % 60) < 10 ? '0' : '') + (Math.abs(this.utcOffset % 60));
+            return (this.utcOffset < 0 ? '-' : '+') +
+                pad(Math.abs(this.utcOffset / 60)) + ':' +
+                pad(Math.abs(this.utcOffset % 60));
         },
 
         T: null,
 
         Z: function () {
-            return -this.utcOffset * 60;
+            return this.utcOffset * 60;
         },
 
         // Full Date/Time
         c: function () {
-            return this.format("Y-m-d") + "T" + this.format("H:i:sP");
+            return this.format('Y-m-d') + 'T' + this.format('H:i:sP');
         },
 
         r: function () {
-            return this.toString();
+            return this.format('D, d M Y H:i:s O');
         },
 
         U: function () {
