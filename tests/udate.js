@@ -148,7 +148,7 @@
                 'second': 40,
                 'millisecond': 0,
                 'utcOffset': 0
-            }, new Jate.UDate.FromUnixTime(1062402400).toUtc());
+            }, new Jate.UDate.FromUnixTime(1062402400));
 
             assertHasFieldsSet.call(this, {
                 'year': 2010,
@@ -159,7 +159,7 @@
                 'second': 0,
                 'millisecond': 820,
                 'utcOffset': 0
-            }, new Jate.UDate.FromUnixTime(1293750000.82).toUtc());
+            }, new Jate.UDate.FromUnixTime(1293750000.82));
         },
 
         testFormat: function () {

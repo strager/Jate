@@ -41,8 +41,14 @@ Jate.UDate.FromDate.prototype = Jate.UDate.prototype;
 
 Jate.UDate.FromUnixTime = function (unixTime) {
     var date = new Date(unixTime * 1000);
+    var utc = (new Jate.UDate.FromDate(date)).toUtc();
+    var i;
 
-    Jate.UDate.FromDate.call(this, date);
+    for (i in utc) {
+        if (utc.hasOwnProperty(i)) {
+            this[i] = utc[i];
+        }
+    }
 };
 
 Jate.UDate.FromUnixTime.prototype = Jate.UDate.prototype;
