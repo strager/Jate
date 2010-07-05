@@ -71,6 +71,20 @@ Jate.UDate.prototype.toTimezone = function (utcOffset) {
     return date.normalized();
 };
 
+Jate.UDate.prototype.toUnixTime = function () {
+    var tempDate = this.toUtc();
+
+    return Date.UTC(
+        tempDate.year,
+        tempDate.month,
+        tempDate.day,
+        tempDate.hour,
+        tempDate.minute,
+        tempDate.second,
+        tempDate.millisecond
+    ) / 1000;
+};
+
 Jate.UDate.prototype.normalized = function () {
     var tempDate = new Date(Date.UTC(
         this.year,
