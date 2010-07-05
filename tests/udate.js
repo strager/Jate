@@ -264,6 +264,37 @@
             this.assertEqual('X', date.format('X'), 'X');
             this.assertEqual('2009', date.format('Y'), 'Y');
             this.assertEqual('-18000', date.format('Z'), 'Z');
+        },
+
+        testSFormatCallsTranslator: function () {
+            var self = this;
+            var date = new Jate.UDate(0, 0, 4, 0, 0, 0);
+            var translatorCalled = false;
+
+            function translator(format, day) {
+                self.assertEqual(4, day);
+                self.assertEqual('{0ord}', format);
+                translatorCalled = true;
+
+                return 'foobar';
+            }
+
+            this.assertEqual('foobar', date.format('S', translator));
+        },
+
+        testDFormatCallsTranslator: function () {
+            var self = this;
+            var date = new Jate.UDate(2000, 1, 0, 0, 0, 0);
+            var translatorCalled = false;
+
+            function translator(format) {
+                self.assertEqual('Mon', format);
+                translatorCalled = true;
+
+                return 'foobar';
+            }
+
+            this.assertEqual('foobar', date.format('D', translator));
         }
     });
 }());

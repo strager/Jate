@@ -254,7 +254,7 @@ Jate.UDate.prototype.format = function (format, translator) {
         },
 
         S: function (t) {
-            return t('{0ord}', this.date);
+            return t('{0ord}', this.day);
         },
 
         w: function () {
