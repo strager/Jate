@@ -65,10 +65,19 @@ test({
     },
 
     testDateFormatterDefault: function () {
-        var formatter;
+        var d = new Jate.DateFormatter('c'),
+            f = d.formatter,
+            date = new Jate.UDate(2004, 2, 12, 15, 19, 21);
 
-        formatter = new Jate.DateFormatter('c');
+        this.assertEqual('2004-03-12T15:19:21+00:00', f(date));
+        this.assertEqual('2004-03-12T15:19:21+00:00', f(date, ''));
+    },
 
-        this.assertEqual('2004-03-12T15:19:21+00:00', formatter.formatter(new Jate.UDate(2004, 2, 12, 15, 19, 21)));
+    testDateFormatterCustom: function () {
+        var d = new Jate.DateFormatter(),
+            f = d.formatter,
+            date = new Jate.UDate(2004, 2, 12, 15, 19, 21);
+
+        this.assertEqual('2004-03-12T15:19:21+00:00', f(date, 'c'));
     }
 });
