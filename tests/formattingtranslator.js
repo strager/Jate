@@ -3,7 +3,8 @@ test({
         var self = this;
         var callCount = 0;
 
-        var p = new Jate.FormattingTranslator.Pluralizer(function (count) {
+        var ft = new Jate.FormattingTranslator(),
+            p = new ft.Pluralizer(function (count) {
             ++callCount;
 
             self.assertEqual(42, count);
@@ -12,12 +13,12 @@ test({
         });
 
         this.assertEqual(69, p.getIndex(42));
-
         this.assertEqual(1, callCount);
     },
 
     testPluralizerPluralize: function () {
-        var p = new Jate.FormattingTranslator.Pluralizer(function (count) {
+        var ft = new Jate.FormattingTranslator(),
+            p = new ft.Pluralizer(function (count) {
             return Math.abs(Math.floor(count));
         });
 
@@ -28,7 +29,8 @@ test({
     },
 
     testPluralizerPluralizeOutOfRangeThrows: function () {
-        var p = new Jate.FormattingTranslator.Pluralizer(function (count) {
+        var ft = new Jate.FormattingTranslator(),
+            p = new ft.Pluralizer(function (count) {
             return count;
         });
 
@@ -52,32 +54,31 @@ test({
     testPluralizerFormatter: function () {
         var callCount = 0;
 
-        var p = new Jate.FormattingTranslator.Pluralizer(function (count) {
+        var ft = new Jate.FormattingTranslator(),
+            p = new ft.Pluralizer(function (count) {
             return Math.abs(Math.floor(count));
         });
 
-        var f = p.formatter;
-
-        this.assertEqual('two', f(2, 'zero|one|two'));
-        this.assertEqual('zero', f(0, 'zero|one|two'));
-        this.assertEqual('one', f(-1, 'zero|one|two'));
-        this.assertEqual('two', f(2.999, 'zero|one|two'));
+        this.assertEqual('two', p(2, 'zero|one|two'));
+        this.assertEqual('zero', p(0, 'zero|one|two'));
+        this.assertEqual('one', p(-1, 'zero|one|two'));
+        this.assertEqual('two', p(2.999, 'zero|one|two'));
     },
 
     testDateFormatterDefault: function () {
-        var d = new Jate.DateFormatter('c'),
-            f = d.formatter,
+        var ft = new Jate.FormattingTranslator(),
+            d = new ft.DateFormatter('c'),
             date = new Jate.UDate(2004, 2, 12, 15, 19, 21);
 
-        this.assertEqual('2004-03-12T15:19:21+00:00', f(date));
-        this.assertEqual('2004-03-12T15:19:21+00:00', f(date, ''));
+        this.assertEqual('2004-03-12T15:19:21+00:00', d(date));
+        this.assertEqual('2004-03-12T15:19:21+00:00', d(date, ''));
     },
 
     testDateFormatterCustom: function () {
-        var d = new Jate.DateFormatter(),
-            f = d.formatter,
+        var ft = new Jate.FormattingTranslator(),
+            d = new ft.DateFormatter(),
             date = new Jate.UDate(2004, 2, 12, 15, 19, 21);
 
-        this.assertEqual('2004-03-12T15:19:21+00:00', f(date, 'c'));
+        this.assertEqual('2004-03-12T15:19:21+00:00', d(date, 'c'));
     }
 });
