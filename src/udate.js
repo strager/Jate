@@ -25,7 +25,7 @@ Jate.UDate = function (year, month, day, hour, minute, second, millisecond, utcO
 };
 
 Jate.UDate.FromDate = function (date) {
-    Jate.UDate.call(this, {
+    return new Jate.UDate({
         'year': date.getFullYear(),
         'month': date.getMonth(),
         'day': date.getDate(),
@@ -37,16 +37,12 @@ Jate.UDate.FromDate = function (date) {
     });
 };
 
-Jate.UDate.FromDate.prototype = Jate.UDate.prototype;
-
 Jate.UDate.FromUnixTime = function (unixTime) {
     var date = new Date(unixTime * 1000);
     var utc = (new Jate.UDate.FromDate(date)).toUtc();
 
-    Jate.UDate.call(this, utc);
+    return utc;
 };
-
-Jate.UDate.FromUnixTime.prototype = Jate.UDate.prototype;
 
 Jate.UDate.prototype.toLocal = function () {
     return this.toTimezone(-Date.getTimezoneOffset());
