@@ -1,5 +1,20 @@
-Jate.FormattingTranslator = function (formatter) {
-    this.Pluralizer = function (indexerFunction) {
+Jate.FormattingTranslator = function (formatter, translator) {
+    function ft() {
+        var args = [ ], i;
+
+        for (i = 0; i < arguments.length; ++i) {
+            args.push(arguments[i]);
+        }
+
+        args[0] = translator.translate(args[0]);
+
+        return formatter.format.apply(formatter, args);
+    }
+
+    ft.formatter = formatter;
+    ft.translator = translator;
+
+    ft.Pluralizer = function (indexerFunction) {
         var optionsDivider = '|';
 
         function getIndex(count) {
@@ -39,16 +54,32 @@ Jate.FormattingTranslator = function (formatter) {
         format.getIndex = getIndex;
         format.pluralize = pluralize;
 
+        format.format = '~';
+
         return format;
     };
 
-    this.DateFormatter = function (defaultFormat) {
+    ft.DateFormatter = function (defaultFormat) {
         function format(value, options) {
             var dateFormat = options || defaultFormat;
 
-            return value.format(dateFormat);
+            return value.format(dateFormat, ft);
         }
+
+        format.format = '@';
 
         return format;
     };
+
+    ft.installFormatters = function (formatters) {
+        var i, formatter;
+
+        for (i = 0; i < formatters.length; ++i) {
+            formatter = formatters[i];
+
+            ft.formatter.formatters[formatter.format] = formatter;
+        }
+    };
+
+    return ft;
 };

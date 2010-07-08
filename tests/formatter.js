@@ -44,7 +44,7 @@ test({
     },
 
     testNoPlaceholderFunctionThrows: function () {
-        var formatter = new Jate.Formatter();
+        var formatter = new Jate.Formatter({ });
 
         this.assertRaise('Error', function () {
             formatter.formatPlaceholder('0', [ 'wootpoot' ]);

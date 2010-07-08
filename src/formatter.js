@@ -1,5 +1,7 @@
 Jate.Formatter = function (placeholderFormatters) {
-    placeholderFormatters = placeholderFormatters || { };
+    placeholderFormatters = placeholderFormatters || {
+        'default': Jate.Formatter.placeholderFormatters.string
+    };
 
     function getPlaceholderFormatterName(rest) {
         var i, name;
@@ -77,6 +79,7 @@ Jate.Formatter = function (placeholderFormatters) {
 
     this.format = format;
     this.formatPlaceholder = formatPlaceholder;
+    this.formatters = placeholderFormatters;
 };
 
 Jate.Formatter.placeholderFormatters = {
