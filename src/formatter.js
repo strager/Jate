@@ -1,4 +1,30 @@
-Jate.Formatter = function () {
+/*
+ * Class: Jate.Formatter
+ * Formatter allows strings to be formatted by replacing
+ * placeholders in the format string with passed arguments.
+ *
+ * Example:
+ * <pre>
+ * var format = Jate.Formatter();
+ * format('{0}, {1}!', 'Hello', 'world'); // returns 'Hello, world!'
+ * format.addFormat('x', function (value, options) {
+ *     return 'Got ' + value + ' with ' + options;
+ * });
+ * format('{0xoptions here}', 42); // returns 'Got 42 with options here'
+ * </pre>
+ *
+ * Property: formats
+ * Key-value pair of aliases to format functions.
+ */
+
+/*
+ * Constructor: Constructor
+ * Creates a new Formatter.
+ *
+ * Parameters:
+ * ... - Format objects added with addFormats.
+ */
+Jate.Formatter = function (/* formats... */) {
     var i;
 
     function format(text) {
@@ -74,10 +100,24 @@ Jate.Formatter = function () {
         return formatter(value, options);
     }
 
+    /*
+     * Method: addFormat
+     * Adds the given format to the format cache.
+     *
+     * Parameters:
+     * alias - Placeholder alias which calls the format function.
+     * formatFunc - The format function to call.
+     */
     function addFormat(alias, formatFunc) {
         format.formats[alias] = formatFunc;
     }
 
+    /* Method: addFormats
+     * Adds the given collection of formats.
+     *
+     * Parameters:
+     * formats - Key-value pairs of aliases to format functions.
+     */
     function addFormats(formats) {
         var alias, formatFunc;
 
