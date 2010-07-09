@@ -209,27 +209,5 @@ test({
         });
 
         this.assertEqual('bar', formatter.formatPlaceholder('0~', [ 0 ]));
-    },
-
-    testStringFormat: function () {
-        this.assertEqual('fsdf$', Jate.Formatter.Formats.string('fsdf$'));
-        this.assertEqual('5451', Jate.Formatter.Formats.string(5451));
-        this.assertEqual('poo', Jate.Formatter.Formats.string({
-            toString: function () {
-                return 'poo';
-            }
-        }));
-    },
-
-    testNumberFormat: function () {
-        this.assertEqual('54678', Jate.Formatter.Formats.number(54678));
-        this.assertEqual('     54678', Jate.Formatter.Formats.number(54678, '10.'));
-        this.assertEqual('0000054678', Jate.Formatter.Formats.number(54678, '010.'));
-        this.assertEqual('54.678', Jate.Formatter.Formats.number(54.678));
-        this.assertEqual('54.68', Jate.Formatter.Formats.number(54.678, '.2'));
-        this.assertEqual('  54.68', Jate.Formatter.Formats.number(54.678, '4.2'));
-        this.assertEqual('  54.678', Jate.Formatter.Formats.number(54.678, '4.'));
-        this.assertEqual('0054.68', Jate.Formatter.Formats.number(54.678, '04.2'));
-        this.assertEqual('0054.678', Jate.Formatter.Formats.number(54.678, '04.'));
     }
 });
