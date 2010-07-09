@@ -1,3 +1,47 @@
+/*
+ * Class: Jate.UDate
+ * UDate represents a date and time, coupled with timezone information.
+ *
+ * Unlike the native Date class, UDate's representation does not change
+ * depending upon local system settings.
+ *
+ * UDate uses the Gregorian calendar for all dates.  It uses standard
+ * 24-hour time.
+ *
+ * Property: year
+ * Year, e.g. 2010.
+ *
+ * Property: month
+ * Month starting from 0 (January), going to 11 (December).
+ *
+ * Property: day
+ * Day starting from 1.
+ *
+ * Property: hour
+ * Military-time hour, ranging from 0 to 23.
+ *
+ * Property: minute
+ * Minute, ranging from 0 to 59.
+ *
+ * Property: second
+ * Second, ranging from 0 to 59.
+ *
+ * Property: millisecond
+ * Millisecond, ranging from 0 to 999.999....
+ *
+ * Property: utcOffset
+ * Minutes the date-time is from its UTC representation.  E.g. -120 for GMT-0200.
+ */
+
+/*
+ * Constructor: Constructor
+ * Creates a new UDate from date parts.
+ *
+ * Parameters:
+ * Either a single object containing date parts, or a list of parameters in the following order:
+ *
+ * year, month, day, hour, minute, second, millisecond, utcOffset
+ */ 
 Jate.UDate = function (year, month, day, hour, minute, second, millisecond, utcOffset) {
     var i, args;
 
@@ -24,6 +68,13 @@ Jate.UDate = function (year, month, day, hour, minute, second, millisecond, utcO
     }
 };
 
+/*
+ * Constructor: FromDate
+ * Creates a UDate from a built-in Date object.
+ *
+ * Parameters:
+ * date - Date object to convert.
+ */
 Jate.UDate.FromDate = function (date) {
     return new Jate.UDate({
         'year': date.getFullYear(),
@@ -37,6 +88,13 @@ Jate.UDate.FromDate = function (date) {
     });
 };
 
+/*
+ * Constructor: FromUnixTime
+ * Creates a UDate from a UNIX time integer.
+ *
+ * Parameters:
+ * unixTime - Number of seconds from the UNIX epoch (1970-01-01T00:00:00Z).
+ */
 Jate.UDate.FromUnixTime = function (unixTime) {
     var date = new Date(unixTime * 1000);
     var utc = (new Jate.UDate.FromDate(date)).toUtc();
@@ -44,14 +102,38 @@ Jate.UDate.FromUnixTime = function (unixTime) {
     return utc;
 };
 
+/*
+ * Method: toLocal
+ * Transforms the UDate instance into one which uses the
+ * system's local timezone.
+ *
+ * Returns: New UDate instance with local timezone.
+ */
 Jate.UDate.prototype.toLocal = function () {
     return this.toTimezone(-Date.getTimezoneOffset());
 };
 
+/*
+ * Method: toUtc
+ * Transforms the UDate instance into one which uses the
+ * GMT timezone.
+ *
+ * Returns: New UDate instance with GMT timezone.
+ */
 Jate.UDate.prototype.toUtc = function () {
     return this.toTimezone(0);
 };
 
+/*
+ * Method: toTimezone
+ * Transforms the UDate instance into one which uses the
+ * specified utcOffset.
+ *
+ * Parameters:
+ * utcOffset - New utcOffset to use.
+ *
+ * Returns: New UDate instance with utcOffset.
+ */
 Jate.UDate.prototype.toTimezone = function (utcOffset) {
     var date = new Jate.UDate(this),
         utcOffsetDelta = utcOffset - date.utcOffset;
@@ -62,6 +144,12 @@ Jate.UDate.prototype.toTimezone = function (utcOffset) {
     return date.normalized();
 };
 
+/*
+ * Method: toUnixTime
+ * Converts the UDate instance into a UNIX timestamp.
+ *
+ * Returns: The number of seconds since the UNIX epoch.
+ */
 Jate.UDate.prototype.toUnixTime = function () {
     var tempDate = this.toUtc();
 
@@ -76,10 +164,29 @@ Jate.UDate.prototype.toUnixTime = function () {
     ) / 1000;
 };
 
+/*
+ * Method: toDate
+ * Converts the UDate instance into a native Date instance.
+ *
+ * Returns: Date instance representing the same time as the
+ * UDate instance.
+ */
 Jate.UDate.prototype.toDate = function () {
     return new Date(this.toUnixTime() * 1000);
 };
 
+/*
+ * Method: normalized
+ * Normalizes a date.
+ *
+ * A normalized date has all values which are within range.
+ * This means milliseconds is between 0 and 999.999...,
+ * hour is between 0 and 23, etc.  If, for example, second
+ * is 60, second resets to 0 and minute rounds up.  Date
+ * parts are rounded down similarly.
+ *
+ * Returns: Normalized UDate instance.
+ */
 Jate.UDate.prototype.normalized = function () {
     var tempDate = new Date(Date.UTC(
         this.year,
@@ -103,15 +210,40 @@ Jate.UDate.prototype.normalized = function () {
     );
 };
 
+/*
+ * Method: static isLeapYear
+ * Calculates if the given year is a leap year.
+ *
+ * A leap year contains one extra day in February.
+ *
+ * Parameters:
+ * year - The year to test.
+ *
+ * Returns: true if the year is a leap year; false otherwise.
+ */
 Jate.UDate.isLeapYear = function (year) {
     return (year % 4 === 0 && year % 100 !== 0) ||
            (year % 400 === 0);
 };
 
+/*
+ * Method: isLeapYear
+ * See: static isLeapYear
+ */
 Jate.UDate.prototype.isLeapYear = function () {
     return Jate.UDate.isLeapYear(this.year);
 };
 
+/*
+ * Method: static getDaysInMonth
+ * Calculates the number of days in the given month
+ *
+ * Parameters:
+ * month - The month to test.
+ * year or isLeapYear - The year the month is in, or true or false if the year is a leap year or not.
+ *
+ * Returns: The number of days in the given month.
+ */
 Jate.UDate.getDaysInMonth = function (month, year /* or isLeapYear */) {
     var isLeapYear;
 
@@ -131,10 +263,29 @@ Jate.UDate.getDaysInMonth = function (month, year /* or isLeapYear */) {
     }
 };
 
+/*
+ * Method: getDaysInMonth
+ * See: static getDaysInMonth.
+ */
 Jate.UDate.prototype.getDaysInMonth = function () {
     return Jate.UDate.getDaysInMonth(this.month, this.year);
 };
 
+/*
+ * Method: static getDayOfYear
+ * Calculates which day of the year the given day/month pair is.
+ *
+ * For example, 1 January is the 0th day, and 31 December is the
+ * 365th or 364th day (depending upon if the year is a leap year
+ * or not, respectively).
+ *
+ * Parameters:
+ * day - Day of the month.
+ * month - Month of the year.
+ * year - Year.
+ *
+ * Returns: The day of the year.
+ */
 Jate.UDate.getDayOfYear = function (day, month, year) {
     var curMonth;
 
@@ -145,14 +296,30 @@ Jate.UDate.getDayOfYear = function (day, month, year) {
     return day - 1;
 };
 
+/*
+ * Method: getDayOfYear
+ * See: static getDayOfYear
+ */
 Jate.UDate.prototype.getDayOfYear = function () {
     return Jate.UDate.getDayOfYear(this.day, this.month, this.year);
 };
 
+/*
+ * Method: getDayOfWeek
+ * Calculates the day of the week the date lies on.
+ *
+ * 0 represents Sunday, and 6 represents Saturday.
+ *
+ * Returns: Index of the day of the week.
+ */
 Jate.UDate.prototype.getDayOfWeek = function () {
     return this.toDate().getUTCDay();
 };
 
+/*
+ * Method: getWeekOfYear
+ * TODO Document.
+ */
 Jate.UDate.prototype.getWeekOfYear = function () {
     var a, b, isoDayOfWeek = this.getDayOfWeek();
 
@@ -166,9 +333,20 @@ Jate.UDate.prototype.getWeekOfYear = function () {
     return 1 + Math.round((a.toUnixTime() - b.toUnixTime()) / 864e2 / 7);
 };
 
-// Adopted from Jacob Wright's original code:
-// http://jacwright.com/projects/javascript/date_format
-// Simulates PHP's date function; see http://php.net/manual/en/function.date.php
+/*
+ * Method: format
+ * Formats the date like PHP's date function.
+ *
+ * http://php.net/manual/en/function.date.php
+ *
+ * Parameters:
+ * format - The format string.  See PHP's date documentation
+ *          for details.
+ * translator - Optional.  The function to execute for translatable
+ *              elements (e.g. week and month names).
+ *
+ * Returns: Formatted date string.
+ */
 Jate.UDate.prototype.format = function (format, translator) {
     var func = arguments.callee,
         replacements = func.replaceChars,
