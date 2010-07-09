@@ -2,8 +2,8 @@ test({
     testFormatRawStringReturnsSelf: function () {
         var formatter = new Jate.Formatter();
 
-        this.assertEqual('foo', formatter.format('foo'));
-        this.assertEqual('{b0ar}x!@$!05', formatter.format('{b0ar}x!@$!05', '99999'));
+        this.assertEqual('foo', formatter('foo'));
+        this.assertEqual('{b0ar}x!@$!05', formatter('{b0ar}x!@$!05', '99999'));
     },
 
     testFormatDefault: function () {
@@ -13,9 +13,9 @@ test({
             }
         });
 
-        this.assertEqual('barx', formatter.format('ba{0}', 'rx'));
-        this.assertEqual('This is a test', formatter.format('{0} {1} {2} {3}', 'This', 'is', 'a', 'test'));
-        this.assertEqual('Hello, world', formatter.format('{2}, {1}', 'bad', 'world', 'Hello'));
+        this.assertEqual('barx', formatter('ba{0}', 'rx'));
+        this.assertEqual('This is a test', formatter('{0} {1} {2} {3}', 'This', 'is', 'a', 'test'));
+        this.assertEqual('Hello, world', formatter('{2}, {1}', 'bad', 'world', 'Hello'));
     },
 
     testFormatCustom: function () {
@@ -33,18 +33,18 @@ test({
             }
         });
 
-        this.assertEqual('over 9000.00', formatter.format('over {0$}', 9000));
-        this.assertEqual('You have 2 cows; I have 1 cow', formatter.format('You have {0#} {0|cows|cow|cows}; I have {1#} {1|cows|cow|cows}', 2, 1));
+        this.assertEqual('over 9000.00', formatter('over {0$}', 9000));
+        this.assertEqual('You have 2 cows; I have 1 cow', formatter('You have {0#} {0|cows|cow|cows}; I have {1#} {1|cows|cow|cows}', 2, 1));
     },
 
     testFormatEscape: function () {
         var formatter = new Jate.Formatter();
 
-        this.assertEqual('foo{0bar}', formatter.format('foo\\{0bar}'));
+        this.assertEqual('foo{0bar}', formatter('foo\\{0bar}'));
     },
 
     testNoPlaceholderFunctionThrows: function () {
-        var formatter = new Jate.Formatter({ });
+        var formatter = new Jate.Formatter();
 
         this.assertRaise('Error', function () {
             formatter.formatPlaceholder('0', [ 'wootpoot' ]);
@@ -212,9 +212,9 @@ test({
     },
 
     testStringFormat: function () {
-        this.assertEqual('fsdf$', Jate.Formatter.formats.string('fsdf$'));
-        this.assertEqual('5451', Jate.Formatter.formats.string(5451));
-        this.assertEqual('poo', Jate.Formatter.formats.string({
+        this.assertEqual('fsdf$', Jate.Formatter.Formats.string('fsdf$'));
+        this.assertEqual('5451', Jate.Formatter.Formats.string(5451));
+        this.assertEqual('poo', Jate.Formatter.Formats.string({
             toString: function () {
                 return 'poo';
             }
@@ -222,14 +222,14 @@ test({
     },
 
     testNumberFormat: function () {
-        this.assertEqual('54678', Jate.Formatter.formats.number(54678));
-        this.assertEqual('     54678', Jate.Formatter.formats.number(54678, '10.'));
-        this.assertEqual('0000054678', Jate.Formatter.formats.number(54678, '010.'));
-        this.assertEqual('54.678', Jate.Formatter.formats.number(54.678));
-        this.assertEqual('54.68', Jate.Formatter.formats.number(54.678, '.2'));
-        this.assertEqual('  54.68', Jate.Formatter.formats.number(54.678, '4.2'));
-        this.assertEqual('  54.678', Jate.Formatter.formats.number(54.678, '4.'));
-        this.assertEqual('0054.68', Jate.Formatter.formats.number(54.678, '04.2'));
-        this.assertEqual('0054.678', Jate.Formatter.formats.number(54.678, '04.'));
+        this.assertEqual('54678', Jate.Formatter.Formats.number(54678));
+        this.assertEqual('     54678', Jate.Formatter.Formats.number(54678, '10.'));
+        this.assertEqual('0000054678', Jate.Formatter.Formats.number(54678, '010.'));
+        this.assertEqual('54.678', Jate.Formatter.Formats.number(54.678));
+        this.assertEqual('54.68', Jate.Formatter.Formats.number(54.678, '.2'));
+        this.assertEqual('  54.68', Jate.Formatter.Formats.number(54.678, '4.2'));
+        this.assertEqual('  54.678', Jate.Formatter.Formats.number(54.678, '4.'));
+        this.assertEqual('0054.68', Jate.Formatter.Formats.number(54.678, '04.2'));
+        this.assertEqual('0054.678', Jate.Formatter.Formats.number(54.678, '04.'));
     }
 });

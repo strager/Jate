@@ -8,7 +8,7 @@ Jate.FormattingTranslator = function (formatter, translator) {
 
         args[0] = translator.translate(args[0]);
 
-        return formatter.format.apply(formatter, args);
+        return formatter.apply(formatter, args);
     }
 
     ft.formatter = formatter;
@@ -54,8 +54,6 @@ Jate.FormattingTranslator = function (formatter, translator) {
         format.getIndex = getIndex;
         format.pluralize = pluralize;
 
-        format.format = '~';
-
         return format;
     };
 
@@ -66,19 +64,7 @@ Jate.FormattingTranslator = function (formatter, translator) {
             return value.format(dateFormat, ft);
         }
 
-        format.format = '@';
-
         return format;
-    };
-
-    ft.installFormatters = function (formatters) {
-        var i, formatter;
-
-        for (i = 0; i < formatters.length; ++i) {
-            formatter = formatters[i];
-
-            ft.formatter.formatters[formatter.format] = formatter;
-        }
     };
 
     return ft;

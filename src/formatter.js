@@ -1,25 +1,8 @@
-Jate.Formatter = function (placeholderFormatters) {
-    placeholderFormatters = placeholderFormatters || {
-        'default': Jate.Formatter.placeholderFormatters.string
-    };
-
-    function getPlaceholderFormatterName(rest) {
-        var i, name;
-
-        for (i = rest.length; i > 0; --i) {
-            name = rest.substr(0, i);
-
-            if (placeholderFormatters.hasOwnProperty(name)) {
-                return name;
-            }
-        }
-
-        return '';
-    }
+Jate.Formatter = function () {
+    var i;
 
     function format(text) {
         var values = [ ], i;
-        var self = this;
 
         for (i = 1; i < arguments.length; ++i) {
             values.push(arguments[i]);
@@ -32,7 +15,7 @@ Jate.Formatter = function (placeholderFormatters) {
 
             var placeholder = placeholder1 || placeholder2;
 
-            return (prefix || '') + self.formatPlaceholder(placeholder, values);
+            return (prefix || '') + format.formatPlaceholder(placeholder, values);
         };
 
         /* I wish JS had lookbehinds. */
@@ -41,6 +24,20 @@ Jate.Formatter = function (placeholderFormatters) {
         var re = new RegExp('(^' + reString + '|(.)(' + reString + '))', 'g');
 
         return text.replace(re, replacement);
+    }
+
+    function getPlaceholderFormatterName(rest) {
+        var i, name;
+
+        for (i = rest.length; i > 0; --i) {
+            name = rest.substr(0, i);
+
+            if (format.formats.hasOwnProperty(name)) {
+                return name;
+            }
+        }
+
+        return '';
     }
 
     function formatPlaceholder(placeholder, values) {
@@ -66,7 +63,7 @@ Jate.Formatter = function (placeholderFormatters) {
 
         var rest = parts[2];
         var formatterName = getPlaceholderFormatterName(rest);
-        var formatter = placeholderFormatters[formatterName || 'default'];
+        var formatter = format.formats[formatterName || 'default'];
 
         var options = rest.substr(formatterName.length);
 
@@ -77,12 +74,34 @@ Jate.Formatter = function (placeholderFormatters) {
         return formatter(value, options);
     }
 
-    this.format = format;
-    this.formatPlaceholder = formatPlaceholder;
-    this.formatters = placeholderFormatters;
+    function addFormat(alias, formatFunc) {
+        format.formats[alias] = formatFunc;
+    }
+
+    function addFormats(formats) {
+        var alias, formatFunc;
+
+        for (alias in formats) {
+            if (formats.hasOwnProperty(alias)) {
+                formatFunc = formats[alias];
+                addFormat(alias, formatFunc);
+            }
+        }
+    }
+
+    format.formatPlaceholder = formatPlaceholder;
+    format.addFormat = addFormat;
+    format.addFormats = addFormats;
+    format.formats = { };
+
+    for (i = 0; i < arguments.length; ++i) {
+        addFormats(arguments[i]);
+    }
+
+    return format;
 };
 
-Jate.Formatter.placeholderFormatters = {
+Jate.Formatter.Formats = {
     string: function (value) {
         return value.toString ? value.toString() : value + '';
     },
@@ -116,5 +135,3 @@ Jate.Formatter.placeholderFormatters = {
         return ret;
     }
 };
-
-Jate.Formatter.formats = Jate.Formatter.placeholderFormatters;
