@@ -1,4 +1,11 @@
+/*
+ * Module: Jate.Formatters
+ */
 Jate.Formatters = {
+    /*
+     * Constructor: Stringifier
+     * Converts the value into a string.
+     */
     Stringifier: function () {
         function format(value) {
             return value.toString ? value.toString() : value + '';
@@ -7,6 +14,28 @@ Jate.Formatters = {
         return format;
     },
 
+    /*
+     * Constructor: NumberFormatter
+     * Formats the value as a number.
+     *
+     * Optionally, you may include arguments
+     * when formatting:
+     *
+     * <pre>
+     * 0###.###
+     * | | |  \__ Number of digits to show after the decimal
+     * | | |      place.  If empty, use as many as needed.
+     * | | |
+     * | |  \___ Decimal placeholder
+     * | |
+     * |  \_____ Number of characters to show before the decimal
+     * |         place.  Will pad with sspaces.  If empty, use
+     * |         as many as needed, but no more
+     * |
+     *  \_______ If present, use '0' instead of a space for the
+     *           pad character.
+     * </pre>
+     */
     NumberFormatter: function () {
         function format(value, options) {
             var optionParts = (options || '').split('.');
@@ -40,6 +69,39 @@ Jate.Formatters = {
         return format;
     },
 
+    /*
+     * Constructor: Pluralizer
+     * Picks a string from an array given an indexer.
+     *
+     * A Pluralizer first transforms the value using an
+     * indexer function into a plurality index.  This
+     * plurality index is used to chose which of the
+     * options to the format to chose.  Options are split
+     * by the pipe character ('|') and are indexed from
+     * 0, like JavaScript arrays.
+     *
+     * For example, an indexer for the English language
+     * may look like:
+     *
+     * <pre>
+     * function (value) {
+     *     return value === 1 ? 0 : 1;
+     * }
+     * </pre>
+     *
+     * and a corresponding option may look
+     * like:
+     * <pre>knife|knives</pre>
+     *
+     * This allows a formatter to write the following
+     * format to pluralize a word:
+     *
+     * <pre>There are {0} {0|knife|knives} in the drawer.</pre>
+     *
+     * Parameters:
+     * indexerFunction(value) - Callback which returns the
+     *                          option index to reference.
+     */
     Pluralizer: function (indexerFunction) {
         var optionsDivider = '|';
 
@@ -83,6 +145,17 @@ Jate.Formatters = {
         return format;
     },
 
+    /*
+     * Constructor: DateFormatter
+     * Formats a given UDate.
+     *
+     * Parameters:
+     * defaultFormat - The date format to use if none is
+     *                 specified in the format itself.
+     * translator - Translation function to use for
+     *              translatable parts of the returned
+     *              format.  See: Jate.UDate.format.
+     */
     DateFormatter: function (defaultFormat, translator) {
         function format(value, options) {
             var dateFormat = options || defaultFormat;
