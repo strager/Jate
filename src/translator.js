@@ -1,3 +1,13 @@
+/*
+ * Class: Jate.Translator
+ * Translator is a class which allows translation based upon
+ * a look-up table.
+ *
+ * Parameters:
+ * ... - Translation objects passed to addTranslations.
+ *
+ * Returns: New instance of a Translator.
+ */
 Jate.Translator = function (/* translations ... */) {
     var sourcePrefix = '\x00\x00';
     var sourceContextDivider = '\x00';
@@ -7,6 +17,15 @@ Jate.Translator = function (/* translations ... */) {
         return sourcePrefix + source + (context ? sourceContextDivider + context : '');
     }
 
+    /*
+     * Method: addTranslation
+     * Adds a translation to the look-up table.
+     *
+     * Parameters:
+     * source - The source text which will be translated.
+     * context - Optional.  The context of the source text.
+     * translation - The resulting translation of the source text.
+     */
     this.addTranslation = function (source, /* [context], */ translation) {
         var context, key;
 
@@ -24,6 +43,13 @@ Jate.Translator = function (/* translations ... */) {
         translations[key] = translation;
     };
 
+    /*
+     * Method: addTranslations
+     * Adds a set of translations to the look-up table.
+     *
+     * Parameters:
+     * translations - Source/translation pairs.
+     */
     this.addTranslations = function (translations) {
         var source, translation;
 
@@ -42,6 +68,16 @@ Jate.Translator = function (/* translations ... */) {
         this.addTranslations(arguments[i]);
     }
 
+    /*
+     * Method: translate
+     * Translates the given source text.
+     *
+     * Parameters:
+     * text - The source to translate.
+     * context - Optional.  The context of the source to translate.
+     *
+     * Returns: The translated text, or the original text if there was no translation.
+     */
     this.translate = function (text, context /* = undefined */) {
         var key = getKeyFromSourceContext(text, context);
 
