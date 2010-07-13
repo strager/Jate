@@ -33,3 +33,13 @@ function assertThrows() {
         assertEquals(comment || 'Throws ' + type, type, exception.name);
     }
 }
+
+function assertHasFieldsSet(expected, actual, comment) {
+    var key;
+
+    for (key in expected) {
+        if (expected.hasOwnProperty(key)) {
+            assertEquals((comment || '') + ' (' + key + ')', expected[key], actual[key]);
+        }
+    }
+}
