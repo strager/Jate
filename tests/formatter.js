@@ -1,9 +1,9 @@
-test({
+TestCase('Formatter', {
     testFormatRawStringReturnsSelf: function () {
         var formatter = new Jate.Formatter();
 
-        this.assertEqual('foo', formatter('foo'));
-        this.assertEqual('{b0ar}x!@$!05', formatter('{b0ar}x!@$!05', '99999'));
+        assertEquals('foo', formatter('foo'));
+        assertEquals('{b0ar}x!@$!05', formatter('{b0ar}x!@$!05', '99999'));
     },
 
     testFormatDefault: function () {
@@ -13,9 +13,9 @@ test({
             }
         });
 
-        this.assertEqual('barx', formatter('ba{0}', 'rx'));
-        this.assertEqual('This is a test', formatter('{0} {1} {2} {3}', 'This', 'is', 'a', 'test'));
-        this.assertEqual('Hello, world', formatter('{2}, {1}', 'bad', 'world', 'Hello'));
+        assertEquals('barx', formatter('ba{0}', 'rx'));
+        assertEquals('This is a test', formatter('{0} {1} {2} {3}', 'This', 'is', 'a', 'test'));
+        assertEquals('Hello, world', formatter('{2}, {1}', 'bad', 'world', 'Hello'));
     },
 
     testFormatCustom: function () {
@@ -33,24 +33,24 @@ test({
             }
         });
 
-        this.assertEqual('over 9000.00', formatter('over {0$}', 9000));
-        this.assertEqual('You have 2 cows; I have 1 cow', formatter('You have {0#} {0|cows|cow|cows}; I have {1#} {1|cows|cow|cows}', 2, 1));
+        assertEquals('over 9000.00', formatter('over {0$}', 9000));
+        assertEquals('You have 2 cows; I have 1 cow', formatter('You have {0#} {0|cows|cow|cows}; I have {1#} {1|cows|cow|cows}', 2, 1));
     },
 
     testFormatEscape: function () {
         var formatter = new Jate.Formatter();
 
-        this.assertEqual('foo{0bar}', formatter('foo\\{0bar}'));
+        assertEquals('foo{0bar}', formatter('foo\\{0bar}'));
     },
 
     testNoPlaceholderFunctionThrows: function () {
         var formatter = new Jate.Formatter();
 
-        this.assertRaise('Error', function () {
+        assertThrows('Error', function () {
             formatter.formatPlaceholder('0', [ 'wootpoot' ]);
         });
 
-        this.assertRaise('Error', function () {
+        assertThrows('Error', function () {
             formatter.formatPlaceholder('2', [ 0, '9', { 'x': 'y' } ]);
         });
     },
@@ -60,11 +60,11 @@ test({
             'default': function () { }
         });
 
-        this.assertRaise('Error', function () {
+        assertThrows('Error', function () {
             formatter.formatPlaceholder('x1');
         });
 
-        this.assertRaise('Error', function () {
+        assertThrows('Error', function () {
             formatter.formatPlaceholder(' 5');
         });
     },
@@ -74,11 +74,11 @@ test({
             'default': function () { }
         });
 
-        this.assertRaise('Error', function () {
+        assertThrows('Error', function () {
             formatter.formatPlaceholder('0', [ ]);
         });
 
-        this.assertRaise('Error', function () {
+        assertThrows('Error', function () {
             formatter.formatPlaceholder('2', [ 'foo', 546 ]);
         });
     },
@@ -94,7 +94,7 @@ test({
 
         formatter.formatPlaceholder('0', [ 0 ]);
 
-        this.assertEqual(1, callCount);
+        assertEquals(1, callCount);
     },
 
     testDefaultPlaceholderCallsDefaultWithValue: function () {
@@ -108,7 +108,7 @@ test({
 
         formatter.formatPlaceholder('0', [ 10 ]);
 
-        this.assertEqual(10, callValue);
+        assertEquals(10, callValue);
     },
 
     testDefaultPlaceholderUsesReturnValue: function () {
@@ -118,7 +118,7 @@ test({
             }
         });
 
-        this.assertEqual('bar', formatter.formatPlaceholder('0', [ 0 ]));
+        assertEquals('bar', formatter.formatPlaceholder('0', [ 0 ]));
     },
 
     testCustomPlaceholderCallsDefault: function () {
@@ -132,7 +132,7 @@ test({
 
         formatter.formatPlaceholder('0fdf~w00t', [ 0 ]);
 
-        this.assertEqual('fdf~w00t', callCustom);
+        assertEquals('fdf~w00t', callCustom);
     },
 
     testCustomPlaceholderCallsCustomOnce: function () {
@@ -146,7 +146,7 @@ test({
 
         formatter.formatPlaceholder('0~', [ 0 ]);
 
-        this.assertEqual(1, callCount);
+        assertEquals(1, callCount);
     },
 
     testExtendedCustomPlaceholderCallsCustomOnce: function () {
@@ -160,7 +160,7 @@ test({
 
         formatter.formatPlaceholder('0~@#$', [ 0 ]);
 
-        this.assertEqual(1, callCount);
+        assertEquals(1, callCount);
     },
 
     testExtendedCustomPlaceholderCallsProperCustomOnce: function () {
@@ -183,8 +183,8 @@ test({
 
         formatter.formatPlaceholder('0~@#$', [ 0 ]);
 
-        this.assertEqual(1, callCount);
-        this.assertEqual(0, badCallCount);
+        assertEquals(1, callCount);
+        assertEquals(0, badCallCount);
     },
 
     testCustomPlaceholderCallsCustomWithValue: function () {
@@ -198,7 +198,7 @@ test({
 
         formatter.formatPlaceholder('0~', [ 10 ]);
 
-        this.assertEqual(10, callValue);
+        assertEquals(10, callValue);
     },
 
     testCustomPlaceholderUsesCustomReturnValue: function () {
@@ -208,6 +208,6 @@ test({
             }
         });
 
-        this.assertEqual('bar', formatter.formatPlaceholder('0~', [ 0 ]));
+        assertEquals('bar', formatter.formatPlaceholder('0~', [ 0 ]));
     }
 });

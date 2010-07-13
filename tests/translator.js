@@ -1,9 +1,9 @@
-test({
+TestCase('Translator', {
     testNoTranslate: function () {
         var translator = new Jate.Translator();
 
-        this.assertEqual('foobar is cool', translator.translate('foobar is cool'));
-        this.assertEqual('{0}, {1}', translator.translate('{0}, {1}'));
+        assertEquals('foobar is cool', translator.translate('foobar is cool'));
+        assertEquals('{0}, {1}', translator.translate('{0}, {1}'));
     },
 
     testConstructorMapping: function () {
@@ -12,8 +12,8 @@ test({
             '{0} {1}': '{1}, {0}'
         });
 
-        this.assertEqual('foobar est trés cool', translator.translate('foobar is very cool'));
-        this.assertEqual('{1}, {0}', translator.translate('{0} {1}'));
+        assertEquals('foobar est trés cool', translator.translate('foobar is very cool'));
+        assertEquals('{1}, {0}', translator.translate('{0} {1}'));
     },
 
     testAddTranslationToEmpty: function () {
@@ -21,8 +21,8 @@ test({
 
         translator.addTranslation('foobar is very cool', 'foobar est trés cool');
 
-        this.assertEqual('foobar est trés cool', translator.translate('foobar is very cool'));
-        this.assertEqual('{0}, {1}', translator.translate('{0}, {1}'));
+        assertEquals('foobar est trés cool', translator.translate('foobar is very cool'));
+        assertEquals('{0}, {1}', translator.translate('{0}, {1}'));
     },
 
     testAddTranslationsToEmpty: function () {
@@ -33,8 +33,8 @@ test({
             '{0} {1}': '{1}, {0}'
         });
 
-        this.assertEqual('foobar est trés cool', translator.translate('foobar is very cool'));
-        this.assertEqual('{1}, {0}', translator.translate('{0} {1}'));
+        assertEquals('foobar est trés cool', translator.translate('foobar is very cool'));
+        assertEquals('{1}, {0}', translator.translate('{0} {1}'));
     },
 
     testAddTranslationToExistingReplaces: function () {
@@ -43,8 +43,8 @@ test({
         translator.addTranslation('foobar is very cool', 'foobar n\'est pas cool');
         translator.addTranslation('foobar is very cool', 'foobar est trés cool');
 
-        this.assertEqual('foobar est trés cool', translator.translate('foobar is very cool'));
-        this.assertEqual('{0}, {1}', translator.translate('{0}, {1}'));
+        assertEquals('foobar est trés cool', translator.translate('foobar is very cool'));
+        assertEquals('{0}, {1}', translator.translate('{0}, {1}'));
     },
 
     testAddTranslationsToExistingReplaces: function () {
@@ -60,8 +60,8 @@ test({
             'foobar is very cool': 'foobar est trés cool'
         });
 
-        this.assertEqual('foobar est trés cool', translator.translate('foobar is very cool'));
-        this.assertEqual('{1}, {0}', translator.translate('{0} {1}'));
+        assertEquals('foobar est trés cool', translator.translate('foobar is very cool'));
+        assertEquals('{1}, {0}', translator.translate('{0} {1}'));
     },
 
     testAddContextualTranslationCoexistsWithExisting: function () {
@@ -70,8 +70,8 @@ test({
         translator.addTranslation('source', 'origin');
         translator.addTranslation('source', 'context', 'traduction');
 
-        this.assertEqual('origin', translator.translate('source'));
-        this.assertEqual('traduction', translator.translate('source', 'context'));
+        assertEquals('origin', translator.translate('source'));
+        assertEquals('traduction', translator.translate('source', 'context'));
     },
 
     testAddContextualTranslationDoesNotAddNoContext: function () {
@@ -79,17 +79,17 @@ test({
 
         translator.addTranslation('source', 'context', 'traduction');
 
-        this.assertEqual('source', translator.translate('source'));
+        assertEquals('source', translator.translate('source'));
     },
 
     testAddContextualTranslationWithNullCharThrows: function () {
         var translator = new Jate.Translator();
 
-        this.assertRaise('Error', function () {
+        assertThrows('Error', function () {
             translator.addTranslation('source', 'c\x000kies', 'traduction');
         });
 
-        this.assertRaise('Error', function () {
+        assertThrows('Error', function () {
             translator.addTranslation('s\x00urce', 'c00kies', 'traduction');
         });
     }

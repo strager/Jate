@@ -1,4 +1,4 @@
-test({
+TestCase('FormattingTranslator', {
     testFormat: function () {
         // This test is a bit heavy.
         var formatter = new Jate.Formatter(),
@@ -17,6 +17,6 @@ test({
 
         translator.addTranslation('L\'heure est {0@}.  J\'ai {1} pomme{1~|s}', 'Time: {0@}; {1} apple{1~|s}');
 
-        this.assertEqual('Time: 2004-03-12T15:19:21+00:00; 42 apples', ft('L\'heure est {0@}.  J\'ai {1} pomme{1~|s}', date, 42));
+        assertEquals('Time: 2004-03-12T15:19:21+00:00; 42 apples', ft('L\'heure est {0@}.  J\'ai {1} pomme{1~|s}', date, 42));
     }
 });

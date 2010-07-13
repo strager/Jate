@@ -61,7 +61,7 @@
         tests[testName] = testFunc;
     }
 
-    test(tests);
+    TestCase('JSLint', tests);
 }({
     undef: true,
     nomen: true,
