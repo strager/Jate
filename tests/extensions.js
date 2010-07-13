@@ -7,7 +7,7 @@ function assertThrows() {
         type = arguments[1];
         callback = arguments[2];
     }
-    else if(arguments.length === 2)
+    else if (arguments.length === 2)
     {
         type = arguments[0];
         callback = arguments[1];
@@ -42,4 +42,8 @@ function assertHasFieldsSet(expected, actual, comment) {
             assertEquals((comment || '') + ' (' + key + ')', expected[key], actual[key]);
         }
     }
+}
+
+function test(a, b, c) {
+    return window.TestCase(a, b, c);
 }

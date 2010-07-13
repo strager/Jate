@@ -1,4 +1,4 @@
-TestCase('UDate', {
+test('UDate', {
     testFlatConstructorSetsFields: function () {
         assertHasFieldsSet.call(this, {
             'year': 2007,

@@ -1,4 +1,4 @@
-TestCase('Formatters', {
+test('Formatters', {
     testStringifier: function () {
         var f = new Jate.Formatters.Stringifier();
 

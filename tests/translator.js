@@ -1,4 +1,4 @@
-TestCase('Translator', {
+test('Translator', {
     testNoTranslate: function () {
         var translator = new Jate.Translator();
 

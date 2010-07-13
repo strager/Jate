@@ -1,6 +1,6 @@
 (function (testOptions) {
     var tests = { },
-        scriptElements = document.body.getElementsByTagName('script'),
+        scriptElements = document.getElementsByTagName('script'),
         count = scriptElements.length,
         i,
         scriptUri,
@@ -18,13 +18,14 @@
     }
 
     function logErrors(scriptName, errors) {
-        var i, error, errorText;
+        var i, error, errorText = '';
 
         for (i = 0; i < errors.length; ++i) {
             error = errors[i];
-            errorText = scriptName + ':' + error.line + ': ' + error.reason + '\n';
-            logElement.appendChild(document.createTextNode(errorText));
+            errorText += scriptName + ':' + error.line + ': ' + error.reason + '\n';
         }
+
+        fail('\n' + errorText);
     }
 
     function makeScriptTester(uri) {
@@ -51,7 +52,7 @@
     for (i = 0; i < count; ++i) {
         scriptUri = scriptElements[i].getAttribute('src');
 
-        if (!scriptUri || !scriptUri.match(/^src|^tests/)) {
+        if (!scriptUri || !scriptUri.match(/^\/test\//)) {
             continue;
         }
 
@@ -61,7 +62,7 @@
         tests[testName] = testFunc;
     }
 
-    TestCase('JSLint', tests);
+    test('JSLint', tests);
 }({
     undef: true,
     nomen: true,
@@ -72,10 +73,15 @@
     browser: true,
     white: true,
     predef: [
-        'Test',
         'test',
         'Jate',
         'window',
-        'JSLINT'
+        'JSLINT',
+
+        'fail',
+        'expectAsserts',
+        'assertEquals',
+        'assertThrows',
+        'assertHasFieldsSet'
     ]
 }));

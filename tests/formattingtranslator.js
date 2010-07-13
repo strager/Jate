@@ -1,4 +1,4 @@
-TestCase('FormattingTranslator', {
+test('FormattingTranslator', {
     testFormat: function () {
         // This test is a bit heavy.
         var formatter = new Jate.Formatter(),

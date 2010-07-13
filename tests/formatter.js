@@ -1,4 +1,4 @@
-TestCase('Formatter', {
+test('Formatter', {
     testFormatRawStringReturnsSelf: function () {
         var formatter = new Jate.Formatter();
 
