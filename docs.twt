@@ -10,10 +10,10 @@
  <Links>True</Links>
  <Api>False</Api>
  <Style>standard_purple</Style>
- <SumCon>1</SumCon>
+ <SumCon>0</SumCon>
  <IncludeSourceLocation>False</IncludeSourceLocation>
- <IncludeLastGenerated>True</IncludeLastGenerated>
- <UseChapterTitleInIndex>False</UseChapterTitleInIndex>
+ <IncludeLastGenerated>False</IncludeLastGenerated>
+ <UseChapterTitleInIndex>True</UseChapterTitleInIndex>
  <IncludeOnlyDocumentedFiles>True</IncludeOnlyDocumentedFiles>
  <GenerateHtmlHelpFiles>False</GenerateHtmlHelpFiles>
  <Collapsible>False</Collapsible>
@@ -25,7 +25,7 @@
  <ContentsTitle>Contents</ContentsTitle>
  <SummaryTitle>Summary</SummaryTitle>
  <Feedback>
-  <FeedbackActive>True</FeedbackActive>
+  <FeedbackActive>False</FeedbackActive>
   <FeedbackLink>Send comments on this topic.</FeedbackLink>
   <FeedbackEmail>strager.nds@gmail.com</FeedbackEmail>
   <FeedbackSubject>Documentation Feedback</FeedbackSubject>
@@ -40,7 +40,7 @@
 <RelDestPath>docs\</RelDestPath>
 <Book>
  <HomeChapter>formattingtranslator.js</HomeChapter>
- <IndexTitle></IndexTitle>
+ <IndexTitle>Jate</IndexTitle>
  <IndexText></IndexText>
  <Copyright></Copyright>
 <C><N>formatter.js</N><R>src\</R></C>
