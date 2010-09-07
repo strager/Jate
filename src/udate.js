@@ -107,7 +107,8 @@ Jate.UDate.FromUnixTime = function (unixTime) {
  * Transforms the UDate instance into one which uses the
  * system's local timezone.
  *
- * Returns: New UDate instance with local timezone.
+ * Returns:
+ * New UDate instance with local timezone.
  */
 Jate.UDate.prototype.toLocal = function () {
     return this.toTimezone(-Date.getTimezoneOffset());
@@ -118,7 +119,8 @@ Jate.UDate.prototype.toLocal = function () {
  * Transforms the UDate instance into one which uses the
  * GMT timezone.
  *
- * Returns: New UDate instance with GMT timezone.
+ * Returns:
+ * New UDate instance with GMT timezone.
  */
 Jate.UDate.prototype.toUtc = function () {
     return this.toTimezone(0);
@@ -132,7 +134,8 @@ Jate.UDate.prototype.toUtc = function () {
  * Parameters:
  * utcOffset - New utcOffset to use.
  *
- * Returns: New UDate instance with utcOffset.
+ * Returns:
+ * New UDate instance with utcOffset.
  */
 Jate.UDate.prototype.toTimezone = function (utcOffset) {
     var date = new Jate.UDate(this),
@@ -148,7 +151,8 @@ Jate.UDate.prototype.toTimezone = function (utcOffset) {
  * Method: toUnixTime
  * Converts the UDate instance into a UNIX timestamp.
  *
- * Returns: The number of seconds since the UNIX epoch.
+ * Returns:
+ * The number of seconds since the UNIX epoch.
  */
 Jate.UDate.prototype.toUnixTime = function () {
     var tempDate = this.toUtc();
@@ -168,7 +172,8 @@ Jate.UDate.prototype.toUnixTime = function () {
  * Method: toDate
  * Converts the UDate instance into a native Date instance.
  *
- * Returns: Date instance representing the same time as the
+ * Returns:
+ * Date instance representing the same time as the
  * UDate instance.
  */
 Jate.UDate.prototype.toDate = function () {
@@ -185,7 +190,8 @@ Jate.UDate.prototype.toDate = function () {
  * is 60, second resets to 0 and minute rounds up.  Date
  * parts are rounded down similarly.
  *
- * Returns: Normalized UDate instance.
+ * Returns:
+ * Normalized UDate instance.
  */
 Jate.UDate.prototype.normalized = function () {
     var tempDate = new Date(Date.UTC(
@@ -219,7 +225,8 @@ Jate.UDate.prototype.normalized = function () {
  * Parameters:
  * year - The year to test.
  *
- * Returns: true if the year is a leap year; false otherwise.
+ * Returns:
+ * true if the year is a leap year; false otherwise.
  */
 Jate.UDate.isLeapYear = function (year) {
     return (year % 4 === 0 && year % 100 !== 0) ||
@@ -242,7 +249,8 @@ Jate.UDate.prototype.isLeapYear = function () {
  * month - The month to test.
  * year or isLeapYear - The year the month is in, or true or false if the year is a leap year or not.
  *
- * Returns: The number of days in the given month.
+ * Returns:
+ * The number of days in the given month.
  */
 Jate.UDate.getDaysInMonth = function (month, year /* or isLeapYear */) {
     var isLeapYear;
@@ -284,7 +292,8 @@ Jate.UDate.prototype.getDaysInMonth = function () {
  * month - Month of the year.
  * year - Year.
  *
- * Returns: The day of the year.
+ * Returns:
+ * The day of the year.
  */
 Jate.UDate.getDayOfYear = function (day, month, year) {
     var curMonth;
@@ -310,7 +319,8 @@ Jate.UDate.prototype.getDayOfYear = function () {
  *
  * 0 represents Sunday, and 6 represents Saturday.
  *
- * Returns: Index of the day of the week.
+ * Returns:
+ * Index of the day of the week.
  */
 Jate.UDate.prototype.getDayOfWeek = function () {
     return this.toDate().getUTCDay();
@@ -345,7 +355,8 @@ Jate.UDate.prototype.getWeekOfYear = function () {
  * translator - Optional.  The function to execute for translatable
  *              elements (e.g. week and month names).
  *
- * Returns: Formatted date string.
+ * Returns:
+ * Formatted date string.
  */
 Jate.UDate.prototype.format = function (format, translator) {
     var func = arguments.callee,

@@ -1,5 +1,5 @@
 /*
- * Module: Jate.Formatters
+ * Namespace: Jate.Formatters
  */
 Jate.Formatters = {
     /*
@@ -21,20 +21,18 @@ Jate.Formatters = {
      * Optionally, you may include arguments
      * when formatting:
      *
-     * <pre>
-     * 0###.###
-     * | | |  \__ Number of digits to show after the decimal
-     * | | |      place.  If empty, use as many as needed.
-     * | | |
-     * | |  \___ Decimal placeholder
-     * | |
-     * |  \_____ Number of characters to show before the decimal
-     * |         place.  Will pad with sspaces.  If empty, use
-     * |         as many as needed, but no more
-     * |
-     *  \_______ If present, use '0' instead of a space for the
-     *           pad character.
-     * </pre>
+     * > 0###.###
+     * > | | |  \__ Number of digits to show after the decimal
+     * > | | |      place.  If empty, use as many as needed.
+     * > | | |
+     * > | |  \___ Decimal placeholder
+     * > | |
+     * > |  \_____ Number of characters to show before the decimal
+     * > |         place.  Will pad with sspaces.  If empty, use
+     * > |         as many as needed, but no more
+     * > |
+     * >  \_______ If present, use '0' instead of a space for the
+     * >           pad character.
      */
     NumberFormatter: function () {
         function format(value, options) {
@@ -83,20 +81,18 @@ Jate.Formatters = {
      * For example, an indexer for the English language
      * may look like:
      *
-     * <pre>
-     * function (value) {
-     *     return value === 1 ? 0 : 1;
-     * }
-     * </pre>
+     * > function (value) {
+     * >     return value === 1 ? 0 : 1;
+     * > }
      *
      * and a corresponding option may look
      * like:
-     * <pre>knife|knives</pre>
+     * > knife|knives
      *
      * This allows a formatter to write the following
      * format to pluralize a word:
      *
-     * <pre>There are {0} {0|knife|knives} in the drawer.</pre>
+     * > There are {0} {0|knife|knives} in the drawer.
      *
      * Parameters:
      * indexerFunction(value) - Callback which returns the

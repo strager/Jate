@@ -98,7 +98,8 @@ Jate.Translator = function (/* translations ... */) {
      * text - The source to translate.
      * context - Optional.  The context of the source to translate.
      *
-     * Returns: The translated text, or the original text if there was no translation.
+     * Returns:
+     * The translated text, or the original text if there was no translation.
      */
     this.translate = function (text, context /* = undefined */) {
         var key = getKeyFromSourceContext(text, context);

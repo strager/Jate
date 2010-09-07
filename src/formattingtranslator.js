@@ -9,7 +9,8 @@
  * formatter - The formatter to perform the format operation.
  * translator - The translator to perform the translation.
  *
- * Returns: New instance of a FormattingTranslator.
+ * Returns:
+ * New instance of a FormattingTranslator.
  * This new instance is callable and performs the translation/format
  * operation.
  *

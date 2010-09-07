@@ -4,17 +4,15 @@
  * placeholders in the format string with passed arguments.
  *
  * Example:
- * <pre>
- * var format = Jate.Formatter();
- * format('{0}, {1}!', 'Hello', 'world'); // returns 'Hello, world!'
- * format.addFormat('x', function (value, options) {
- *     return 'Got ' + value + ' with ' + options;
- * });
- * format('{0xoptions here}', 42); // returns 'Got 42 with options here'
- * </pre>
- *
- * Property: formats
- * Key-value pair of aliases to format functions.
+ * > var format = Jate.Formatter();
+ * > format('{0}, {1}!', 'Hello', 'world'); // returns 'Hello, world!'
+ * > format.addFormat('x', function (value, options) {
+ * >     return 'Got ' + value + ' with ' + options;
+ * > });
+ * > format('{0xoptions here}', 42); // returns 'Got 42 with options here'
+ * > 
+ * > Property: formats
+ * > Key-value pair of aliases to format functions.
  */
 
 /*
