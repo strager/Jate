@@ -6,7 +6,29 @@
  * Parameters:
  * ... - Translation objects passed to addTranslations.
  *
- * Returns: New instance of a Translator.
+ * Returns:
+ * New instance of a Translator.
+ *
+ * Example:
+ * First, create a Translator instance.
+ *
+ * > var translator = new Jate.Translator();
+ *
+ * Then, load translations.
+ *
+ * > translator.addTranslation('Yes', 'Oui');
+ * > translator.addTranslation('No', 'Non');
+ *
+ * Finally, translate at will.
+ *
+ * > translator.translate('Yes'); // 'Oui'
+ *
+ * Use contexts when loading translations to give translations namespaces.
+ *
+ * > translator.addTranslation('Exit', 'Program exit', 'Quitter');
+ * > translator.addTranslation('Exit', 'Exit door', 'Sortie');
+ * > translator.translate('Exit', 'Program exit'); // 'Quitter'
+ * > translator.translate('Exit', 'Exit door'); // 'Sortie'
  */
 Jate.Translator = function (/* translations ... */) {
     var sourcePrefix = '\x00\x00';
