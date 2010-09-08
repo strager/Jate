@@ -1,7 +1,7 @@
-(function() {
+(function () {
     var assert = require('assert');
 
-    exports.throws = function() {
+    exports.throws = function () {
         var comment, type, callback, exception;
 
         if (arguments.length >= 3) {
@@ -30,7 +30,7 @@
         }
     };
 
-    exports.hasFieldsSet = function(expected, actual, comment) {
+    exports.hasFieldsSet = function (expected, actual, comment) {
         var key;
 
         for (key in expected) {

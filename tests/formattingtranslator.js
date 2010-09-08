@@ -1,4 +1,4 @@
-(function() {
+(function () {
     var assert = require('assert');
     var Translator = require('../src/translator').Translator;
     var Formatter = require('../src/formatter').Formatter;

@@ -1,4 +1,4 @@
-(function() {
+(function () {
     var assert = require('assert');
     var Localizers = require('../src/localizers');
     var UDate = require('../src/udate').UDate;
@@ -13,7 +13,7 @@
                 return 'poo';
             }
         }));
-    },
+    };
 
     exports.testNumberFormatter = function () {
         var f = Localizers.NumberFormatter();
@@ -27,7 +27,7 @@
         assert.equal('  54.678', f(54.678, '4.'));
         assert.equal('0054.68', f(54.678, '04.2'));
         assert.equal('0054.678', f(54.678, '04.'));
-    },
+    };
 
     exports.testPluralizerGetIndexCallsCallback = function () {
         var expectedAsserts = 2, asserts = 0;
@@ -43,7 +43,7 @@
         ++asserts;
 
         assert.equal(expectedAsserts, asserts, 'expected asserts');
-    },
+    };
 
     exports.testPluralizerPluralize = function () {
         var p = Localizers.Pluralizer(function (count) {
@@ -54,7 +54,7 @@
         assert.equal('zero', p.pluralize(0, [ 'zero', 'one', 'two' ]));
         assert.equal('one', p.pluralize(-1, [ 'zero', 'one', 'two' ]));
         assert.equal('two', p.pluralize(2.999, [ 'zero', 'one', 'two' ]));
-    },
+    };
 
     exports.testPluralizerPluralizeOutOfRangeThrows = function () {
         var p = Localizers.Pluralizer(function (count) {
@@ -76,7 +76,7 @@
         assert.throws(function () {
             p.pluralize(-1, [ 'o', 'x' ]);
         }, 'Error');
-    },
+    };
 
     exports.testPluralizerFormatter = function () {
         var callCount = 0;
@@ -89,7 +89,7 @@
         assert.equal('zero', p(0, 'zero|one|two'));
         assert.equal('one', p(-1, 'zero|one|two'));
         assert.equal('two', p(2.999, 'zero|one|two'));
-    },
+    };
 
     exports.testDateFormatterDefault = function () {
         var d = Localizers.DateFormatter('c'),
@@ -97,14 +97,14 @@
 
         assert.equal('2004-03-12T15:19:21+00:00', d(date));
         assert.equal('2004-03-12T15:19:21+00:00', d(date, ''));
-    },
+    };
 
     exports.testDateFormatterCustom = function () {
         var d = Localizers.DateFormatter(),
             date = UDate(2004, 2, 12, 15, 19, 21);
 
         assert.equal('2004-03-12T15:19:21+00:00', d(date, 'c'));
-    }
+    };
 
     if (require.main === module) {
         require('patr/runner').run(exports);

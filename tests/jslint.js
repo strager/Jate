@@ -1,87 +1,45 @@
-(function (testOptions) {
-    var tests = { },
-        scriptElements = document.getElementsByTagName('script'),
-        count = scriptElements.length,
-        i,
-        scriptUri,
-        testName,
-        testFunc,
-        logElement = document.getElementById('jslint_log');
+(function () {
+    var scripts = [
+        './formatter.js',
+        './formattingtranslator.js',
+        './localizers.js',
+        './translator.js',
+        './udate.js',
+        './jslint.js',
+        './extensions.js',
 
-    function getScript(uri) {
-        var xhr = new XMLHttpRequest();
+        '../src/formatter.js',
+        '../src/formattingtranslator.js',
+        '../src/localizers.js',
+        '../src/translator.js',
+        '../src/udate.js',
 
-        xhr.open('GET', uri, false);
-        xhr.send(null);
+        '../lib/jslintassert.js'
+    ], options = {
+        undef: false,   // TODO Enable
+        nomen: true,
+        eqeqeq: true,
+        bitwise: true,
+        newcap: false,
+        immed: false,   // TODO Enable
+        browser: false,
+        white: true,
+        predef: [
+            'require',
+            'exports',
+            'process'
+        ]
+    };
 
-        return xhr.responseText;
+    var i;
+
+    var lintFileTest = require('../lib/jslintassert').lintFileTest;
+
+    for (i = 0; i < scripts.length; ++i) {
+        exports[scripts[i]] = lintFileTest(__dirname + '/' + scripts[i], options);
     }
 
-    function logErrors(scriptName, errors) {
-        var i, error, errorText = '';
-
-        for (i = 0; i < errors.length; ++i) {
-            error = errors[i];
-            errorText += scriptName + ':' + error.line + ': ' + error.reason + '\n';
-        }
-
-        fail('\n' + errorText);
+    if (require.main === module) {
+        require('patr/runner').run(exports);
     }
-
-    function makeScriptTester(uri) {
-        // Other calls to JSLINT may modify the options object
-        var testOptionsCopy = { }, option;
-
-        for (option in testOptions) {
-            if (testOptions.hasOwnProperty(option)) {
-                testOptionsCopy[option] = testOptions[option];
-            }
-        }
-
-        return function () {
-            var success = JSLINT(getScript(uri), testOptionsCopy);
-
-            if (!success) {
-                logErrors(uri, JSLINT.errors);
-
-                throw new Error('See JSLint logs');
-            }
-        };
-    }
-
-    for (i = 0; i < count; ++i) {
-        scriptUri = scriptElements[i].getAttribute('src');
-
-        if (!scriptUri || !scriptUri.match(/^\/test\//)) {
-            continue;
-        }
-
-        testName = 'test JSLint ' + scriptUri;
-        testFunc = makeScriptTester(scriptUri);
-
-        tests[testName] = testFunc;
-    }
-
-    test('JSLint', tests);
-}({
-    undef: true,
-    nomen: true,
-    eqeqeq: true,
-    bitwise: true,
-    newcap: true,
-    immed: true,
-    browser: true,
-    white: true,
-    predef: [
-        'test',
-        'Jate',
-        'window',
-        'JSLINT',
-
-        'fail',
-        'expectAsserts',
-        'assertEquals',
-        'assertThrows',
-        'assertHasFieldsSet'
-    ]
-}));
+})();

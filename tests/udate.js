@@ -1,4 +1,4 @@
-(function() {
+(function () {
     var UDate = require('../src/udate').UDate;
     var assert = require('assert');
     var assertHasFieldsSet = require('./extensions').hasFieldsSet;
@@ -23,7 +23,7 @@
             400,
             0
         ));
-    },
+    };
 
     exports.testObjectConstructorSetsFields = function () {
         assertHasFieldsSet.call(this, {
@@ -45,7 +45,7 @@
             'millisecond': 400,
             'utcOffset': 0
         }));
-    },
+    };
 
     exports.testFromDate = function () {
         assertHasFieldsSet.call(this, {
@@ -65,7 +65,7 @@
             59,
             400
         )));
-    },
+    };
 
     exports.testToTimezone = function () {
         assertHasFieldsSet.call(this, {
@@ -87,7 +87,7 @@
             400,
             120
         ).toTimezone(0));
-    },
+    };
 
     exports.testNormalized = function () {
         assertHasFieldsSet.call(this, {
@@ -129,7 +129,7 @@
             -1,
             0
         ).normalized());
-    },
+    };
 
     exports.testFromUnixTime = function () {
         assertHasFieldsSet.call(this, {
@@ -153,7 +153,7 @@
             'millisecond': 820,
             'utcOffset': 0
         }, UDate.FromUnixTime(1293750000.82));
-    },
+    };
 
     exports.testToUnixTime = function () {
         assert.equal(1062402400, UDate({
@@ -177,7 +177,7 @@
             'millisecond': 820,
             'utcOffset': -120
         }).toUnixTime());
-    },
+    };
 
     exports.testGetDayOfWeek = function () {
         assert.equal(1, (UDate.FromUnixTime(1062419200)).getDayOfWeek());
@@ -187,7 +187,7 @@
         assert.equal(5, (UDate.FromUnixTime(1062764800)).getDayOfWeek());
         assert.equal(6, (UDate.FromUnixTime(1062851200)).getDayOfWeek());
         assert.equal(0, (UDate.FromUnixTime(1062937600)).getDayOfWeek());
-    },
+    };
 
     exports.testFormat = function () {
         assert.equal('2004-03-12T15:19:21+00:00', (UDate(2004, 2, 12, 15, 19, 21)).format('c'));
@@ -200,7 +200,7 @@
         assert.equal('52 1293750000', (UDate.FromUnixTime(1293750000.82)).format('W U'));
         assert.equal('52', (UDate.FromUnixTime(1293836400)).format('W'));
         assert.equal('52 2011-01-02', (UDate.FromUnixTime(1293974054)).format('W Y-m-d'));
-    },
+    };
 
     exports.testFormatParts = function () {
         var date = UDate.FromUnixTime(1234567890).toTimezone(-5 * 60);
@@ -257,7 +257,7 @@
         assert.equal('X', date.format('X'), 'X');
         assert.equal('2009', date.format('Y'), 'Y');
         assert.equal('-18000', date.format('Z'), 'Z');
-    },
+    };
 
     exports.testSFormatCallsTranslator = function () {
         var expectedAsserts = 3, asserts = 0;
@@ -277,7 +277,7 @@
         ++asserts;
 
         assert.equal(expectedAsserts, asserts, 'expected asserts');
-    },
+    };
 
     exports.testDFormatCallsTranslator = function () {
         var expectedAsserts = 2, asserts = 0;
@@ -294,7 +294,7 @@
         ++asserts;
 
         assert.equal(expectedAsserts, asserts, 'expected asserts');
-    }
+    };
 
     if (require.main === module) {
         require('patr/runner').run(exports);
