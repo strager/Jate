@@ -7,8 +7,8 @@
  * month name translation, for example.
  *
  * Example:
- * > formatter.addFormat('default', new Jate.Localizers.Stringifier());
- * > formatter.addFormat('l j F Y', new Jate.Localizers.DateFormatter('c', translator));
+ * > formatter.addFormat('default', Jate.Localizers.Stringifier());
+ * > formatter.addFormat('l j F Y', Jate.Localizers.DateFormatter('c', translator));
  * >
  * > formatter('Today is {0@}', UDate.FromDate(new Date()));
  */

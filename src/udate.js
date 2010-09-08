@@ -43,6 +43,11 @@
  * year, month, day, hour, minute, second, millisecond, utcOffset
  */ 
 Jate.UDate = function (year, month, day, hour, minute, second, millisecond, utcOffset) {
+    if (!(this instanceof Jate.UDate)) {
+        // FIXME Help me DRY this up
+        return new Jate.UDate(year, month, day, hour, minute, second, millisecond, utcOffset);
+    }
+
     var i, args;
 
     args = 'year,month,day,hour,minute,second,millisecond,utcOffset'.split(',');
@@ -63,7 +68,9 @@ Jate.UDate = function (year, month, day, hour, minute, second, millisecond, utcO
     } else {
         // Initialize from args.
         for (i = 0; i < arguments.length; ++i) {
-            this[args[i]] = arguments[i];
+            if (typeof arguments[i] !== 'undefined') {
+                this[args[i]] = arguments[i];
+            }
         }
     }
 };
@@ -76,7 +83,7 @@ Jate.UDate = function (year, month, day, hour, minute, second, millisecond, utcO
  * date - Date object to convert.
  */
 Jate.UDate.FromDate = function (date) {
-    return new Jate.UDate({
+    return Jate.UDate({
         'year': date.getFullYear(),
         'month': date.getMonth(),
         'day': date.getDate(),
@@ -97,7 +104,7 @@ Jate.UDate.FromDate = function (date) {
  */
 Jate.UDate.FromUnixTime = function (unixTime) {
     var date = new Date(unixTime * 1000);
-    var utc = (new Jate.UDate.FromDate(date)).toUtc();
+    var utc = Jate.UDate.FromDate(date).toUtc();
 
     return utc;
 };
@@ -138,7 +145,7 @@ Jate.UDate.prototype.toUtc = function () {
  * New UDate instance with utcOffset.
  */
 Jate.UDate.prototype.toTimezone = function (utcOffset) {
-    var date = new Jate.UDate(this),
+    var date = Jate.UDate(this),
         utcOffsetDelta = utcOffset - date.utcOffset;
 
     date.utcOffset = utcOffset;
@@ -204,7 +211,7 @@ Jate.UDate.prototype.normalized = function () {
         this.millisecond
     ));
 
-    return new Jate.UDate(
+    return Jate.UDate(
         tempDate.getUTCFullYear(),
         tempDate.getUTCMonth(),
         tempDate.getUTCDate(),
@@ -337,8 +344,8 @@ Jate.UDate.prototype.getWeekOfYear = function () {
         isoDayOfWeek = 7;
     }
 
-    a = (new Jate.UDate(this.year, this.month, this.day - isoDayOfWeek + 4)).normalized();
-    b = (new Jate.UDate(a.year, 0, 4)).normalized();
+    a = (Jate.UDate(this.year, this.month, this.day - isoDayOfWeek + 4)).normalized();
+    b = (Jate.UDate(a.year, 0, 4)).normalized();
 
     return 1 + Math.round((a.toUnixTime() - b.toUnixTime()) / 864e2 / 7);
 };

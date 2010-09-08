@@ -9,7 +9,7 @@ test('UDate', {
             'second': 59,
             'millisecond': 400,
             'utcOffset': 0
-        }, new Jate.UDate(
+        }, Jate.UDate(
             2007,
             4,
             22,
@@ -31,7 +31,7 @@ test('UDate', {
             'second': 59,
             'millisecond': 400,
             'utcOffset': 0
-        }, new Jate.UDate({
+        }, Jate.UDate({
             'year': 2007,
             'month': 4,
             'day': 22,
@@ -52,7 +52,7 @@ test('UDate', {
             'minute': 16,
             'second': 59,
             'millisecond': 400
-        }, new Jate.UDate.FromDate(new Date(
+        }, Jate.UDate.FromDate(new Date(
             2007,
             4,
             22,
@@ -73,7 +73,7 @@ test('UDate', {
             'second': 59,
             'millisecond': 400,
             'utcOffset': 0
-        }, new Jate.UDate(
+        }, Jate.UDate(
             2007,
             4,
             22,
@@ -95,7 +95,7 @@ test('UDate', {
             'second': 1,
             'millisecond': 0,
             'utcOffset': 0
-        }, new Jate.UDate(
+        }, Jate.UDate(
             2000,
             12,
             31,
@@ -115,7 +115,7 @@ test('UDate', {
             'second': 59,
             'millisecond': 999,
             'utcOffset': 0
-        }, new Jate.UDate(
+        }, Jate.UDate(
             2000,
             0,
             0,
@@ -137,7 +137,7 @@ test('UDate', {
             'second': 40,
             'millisecond': 0,
             'utcOffset': 0
-        }, new Jate.UDate.FromUnixTime(1062402400));
+        }, Jate.UDate.FromUnixTime(1062402400));
 
         assertHasFieldsSet.call(this, {
             'year': 2010,
@@ -148,11 +148,11 @@ test('UDate', {
             'second': 0,
             'millisecond': 820,
             'utcOffset': 0
-        }, new Jate.UDate.FromUnixTime(1293750000.82));
+        }, Jate.UDate.FromUnixTime(1293750000.82));
     },
 
     testToUnixTime: function () {
-        assertEquals(1062402400, new Jate.UDate({
+        assertEquals(1062402400, Jate.UDate({
             'year': 2003,
             'month': 8,
             'day': 1,
@@ -163,7 +163,7 @@ test('UDate', {
             'utcOffset': 0
         }).toUnixTime());
 
-        assertEquals(1293750000.82, new Jate.UDate({
+        assertEquals(1293750000.82, Jate.UDate({
             'year': 2010,
             'month': 11,
             'day': 30,
@@ -176,30 +176,30 @@ test('UDate', {
     },
 
     testGetDayOfWeek: function () {
-        assertEquals(1, (new Jate.UDate.FromUnixTime(1062419200)).getDayOfWeek());
-        assertEquals(2, (new Jate.UDate.FromUnixTime(1062505600)).getDayOfWeek());
-        assertEquals(3, (new Jate.UDate.FromUnixTime(1062592000)).getDayOfWeek());
-        assertEquals(4, (new Jate.UDate.FromUnixTime(1062678400)).getDayOfWeek());
-        assertEquals(5, (new Jate.UDate.FromUnixTime(1062764800)).getDayOfWeek());
-        assertEquals(6, (new Jate.UDate.FromUnixTime(1062851200)).getDayOfWeek());
-        assertEquals(0, (new Jate.UDate.FromUnixTime(1062937600)).getDayOfWeek());
+        assertEquals(1, (Jate.UDate.FromUnixTime(1062419200)).getDayOfWeek());
+        assertEquals(2, (Jate.UDate.FromUnixTime(1062505600)).getDayOfWeek());
+        assertEquals(3, (Jate.UDate.FromUnixTime(1062592000)).getDayOfWeek());
+        assertEquals(4, (Jate.UDate.FromUnixTime(1062678400)).getDayOfWeek());
+        assertEquals(5, (Jate.UDate.FromUnixTime(1062764800)).getDayOfWeek());
+        assertEquals(6, (Jate.UDate.FromUnixTime(1062851200)).getDayOfWeek());
+        assertEquals(0, (Jate.UDate.FromUnixTime(1062937600)).getDayOfWeek());
     },
 
     testFormat: function () {
-        assertEquals('2004-03-12T15:19:21+00:00', (new Jate.UDate(2004, 2, 12, 15, 19, 21)).format('c'));
-        assertEquals('07:09:40 m is month', (new Jate.UDate.FromUnixTime(1062402400)).format('H:m:s \\m \\i\\s \\m\\o\\n\\t\\h'));
-        assertEquals('September 2, 2003, 12:26 am', (new Jate.UDate.FromUnixTime(1062462400)).format('F j, Y, g:i a'));
-        assertEquals('2003 36 2003', (new Jate.UDate.FromUnixTime(1062462400)).format('Y W o'));
-        assertEquals('53', (new Jate.UDate.FromUnixTime(1104534000)).format('W'));
-        assertEquals('53', (new Jate.UDate.FromUnixTime(1104620400)).format('W'));
-        assertEquals('999 31', (new Jate.UDate.FromUnixTime(1104533999)).format('B t'));
-        assertEquals('52 1293750000', (new Jate.UDate.FromUnixTime(1293750000.82)).format('W U'));
-        assertEquals('52', (new Jate.UDate.FromUnixTime(1293836400)).format('W'));
-        assertEquals('52 2011-01-02', (new Jate.UDate.FromUnixTime(1293974054)).format('W Y-m-d'));
+        assertEquals('2004-03-12T15:19:21+00:00', (Jate.UDate(2004, 2, 12, 15, 19, 21)).format('c'));
+        assertEquals('07:09:40 m is month', (Jate.UDate.FromUnixTime(1062402400)).format('H:m:s \\m \\i\\s \\m\\o\\n\\t\\h'));
+        assertEquals('September 2, 2003, 12:26 am', (Jate.UDate.FromUnixTime(1062462400)).format('F j, Y, g:i a'));
+        assertEquals('2003 36 2003', (Jate.UDate.FromUnixTime(1062462400)).format('Y W o'));
+        assertEquals('53', (Jate.UDate.FromUnixTime(1104534000)).format('W'));
+        assertEquals('53', (Jate.UDate.FromUnixTime(1104620400)).format('W'));
+        assertEquals('999 31', (Jate.UDate.FromUnixTime(1104533999)).format('B t'));
+        assertEquals('52 1293750000', (Jate.UDate.FromUnixTime(1293750000.82)).format('W U'));
+        assertEquals('52', (Jate.UDate.FromUnixTime(1293836400)).format('W'));
+        assertEquals('52 2011-01-02', (Jate.UDate.FromUnixTime(1293974054)).format('W Y-m-d'));
     },
 
     testFormatParts: function () {
-        var date = new Jate.UDate.FromUnixTime(1234567890).toTimezone(-5 * 60);
+        var date = Jate.UDate.FromUnixTime(1234567890).toTimezone(-5 * 60);
 
         assertEquals('a', 'pm', date.format('a'));
         assertEquals('b', 'b', date.format('b'));
@@ -258,7 +258,7 @@ test('UDate', {
     testSFormatCallsTranslator: function () {
         expectAsserts(3);
 
-        var date = new Jate.UDate(0, 0, 4, 0, 0, 0);
+        var date = Jate.UDate(0, 0, 4, 0, 0, 0);
         var translatorCalled = false;
 
         function translator(format, day) {
@@ -275,7 +275,7 @@ test('UDate', {
     testDFormatCallsTranslator: function () {
         expectAsserts(2);
 
-        var date = new Jate.UDate(2000, 1, 0, 0, 0, 0);
+        var date = Jate.UDate(2000, 1, 0, 0, 0, 0);
         var translatorCalled = false;
 
         function translator(format) {

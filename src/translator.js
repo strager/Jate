@@ -4,7 +4,7 @@
  * a look-up table.
  *
  * Parameters:
- * ... - Translation objects passed to addTranslations.
+ * None
  *
  * Returns:
  * New instance of a Translator.
@@ -30,7 +30,11 @@
  * > translator.translate('Exit', 'Program exit'); // 'Quitter'
  * > translator.translate('Exit', 'Exit door'); // 'Sortie'
  */
-Jate.Translator = function (/* translations ... */) {
+Jate.Translator = function () {
+    if (!(this instanceof Jate.Translator)) {
+        return new Jate.Translator();
+    }
+
     var sourcePrefix = '\x00\x00';
     var sourceContextDivider = '\x00';
     var translations = { };
@@ -83,12 +87,6 @@ Jate.Translator = function (/* translations ... */) {
             }
         }
     };
-
-    var i;
-
-    for (i = 0; i < arguments.length; ++i) {
-        this.addTranslations(arguments[i]);
-    }
 
     /*
      * Method: translate

@@ -1,13 +1,13 @@
 test('Formatter', {
     testFormatRawStringReturnsSelf: function () {
-        var formatter = new Jate.Formatter();
+        var formatter = Jate.Formatter();
 
         assertEquals('foo', formatter('foo'));
         assertEquals('{b0ar}x!@$!05', formatter('{b0ar}x!@$!05', '99999'));
     },
 
     testFormatDefault: function () {
-        var formatter = new Jate.Formatter({
+        var formatter = Jate.Formatter({
             'default': function (value) {
                 return value.toString ? value.toString() : value + '';
             }
@@ -19,7 +19,7 @@ test('Formatter', {
     },
 
     testFormatCustom: function () {
-        var formatter = new Jate.Formatter({
+        var formatter = Jate.Formatter({
             '$': function (value) {
                 return value.toFixed(2);
             },
@@ -38,13 +38,13 @@ test('Formatter', {
     },
 
     testFormatEscape: function () {
-        var formatter = new Jate.Formatter();
+        var formatter = Jate.Formatter();
 
         assertEquals('foo{0bar}', formatter('foo\\{0bar}'));
     },
 
     testNoPlaceholderFunctionThrows: function () {
-        var formatter = new Jate.Formatter();
+        var formatter = Jate.Formatter();
 
         assertThrows('Error', function () {
             formatter.formatPlaceholder('0', [ 'wootpoot' ]);
@@ -56,7 +56,7 @@ test('Formatter', {
     },
 
     testBadPlaceholderFormatThrows: function () {
-        var formatter = new Jate.Formatter({
+        var formatter = Jate.Formatter({
             'default': function () { }
         });
 
@@ -70,7 +70,7 @@ test('Formatter', {
     },
 
     testOutOfRangePlaceholderThrows: function () {
-        var formatter = new Jate.Formatter({
+        var formatter = Jate.Formatter({
             'default': function () { }
         });
 
@@ -86,7 +86,7 @@ test('Formatter', {
     testDefaultPlaceholderCallsDefaultOnce: function () {
         var callCount = 0;
 
-        var formatter = new Jate.Formatter({
+        var formatter = Jate.Formatter({
             'default': function (value) {
                 ++callCount;
             }
@@ -100,7 +100,7 @@ test('Formatter', {
     testDefaultPlaceholderCallsDefaultWithValue: function () {
         var callValue;
 
-        var formatter = new Jate.Formatter({
+        var formatter = Jate.Formatter({
             'default': function (value) {
                 callValue = value;
             }
@@ -112,7 +112,7 @@ test('Formatter', {
     },
 
     testDefaultPlaceholderUsesReturnValue: function () {
-        var formatter = new Jate.Formatter({
+        var formatter = Jate.Formatter({
             'default': function (value) {
                 return 'bar';
             }
@@ -124,7 +124,7 @@ test('Formatter', {
     testCustomPlaceholderCallsDefault: function () {
         var callCustom;
 
-        var formatter = new Jate.Formatter({
+        var formatter = Jate.Formatter({
             'default': function (value, custom) {
                 callCustom = custom;
             }
@@ -138,7 +138,7 @@ test('Formatter', {
     testCustomPlaceholderCallsCustomOnce: function () {
         var callCount = 0;
 
-        var formatter = new Jate.Formatter({
+        var formatter = Jate.Formatter({
             '~': function (value) {
                 ++callCount;
             }
@@ -152,7 +152,7 @@ test('Formatter', {
     testExtendedCustomPlaceholderCallsCustomOnce: function () {
         var callCount = 0;
 
-        var formatter = new Jate.Formatter({
+        var formatter = Jate.Formatter({
             '~': function (value) {
                 ++callCount;
             }
@@ -167,7 +167,7 @@ test('Formatter', {
         var callCount = 0;
         var badCallCount = 0;
 
-        var formatter = new Jate.Formatter({
+        var formatter = Jate.Formatter({
             'default': function (value) {
                 ++badCallCount;
             },
@@ -190,7 +190,7 @@ test('Formatter', {
     testCustomPlaceholderCallsCustomWithValue: function () {
         var callValue;
 
-        var formatter = new Jate.Formatter({
+        var formatter = Jate.Formatter({
             '~': function (value) {
                 callValue = value;
             }
@@ -202,7 +202,7 @@ test('Formatter', {
     },
 
     testCustomPlaceholderUsesCustomReturnValue: function () {
-        var formatter = new Jate.Formatter({
+        var formatter = Jate.Formatter({
             '~': function (value) {
                 return 'bar';
             }
