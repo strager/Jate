@@ -1,10 +1,10 @@
 /*
- * Class: Jate.Formatter
+ * Class: Formatter
  * Formatter allows strings to be formatted by replacing
  * placeholders in the format string with passed arguments.
  *
  * Example:
- * > var format = Jate.Formatter();
+ * > var format = Formatter();
  * > format('{0}, {1}!', 'Hello', 'world'); // returns 'Hello, world!'
  * > format.addFormat('x', function (value, options) {
  * >     return 'Got ' + value + ' with ' + options;

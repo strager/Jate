@@ -1,5 +1,5 @@
 /*
- * Class: exports.UDate
+ * Class: UDate
  * UDate represents a date and time, coupled with timezone information.
  *
  * Unlike the native Date class, UDate's representation does not change

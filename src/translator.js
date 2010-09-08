@@ -1,5 +1,5 @@
 /*
- * Class: Jate.Translator
+ * Class: Translator
  * Translator is a class which allows translation based upon
  * a look-up table.
  *
@@ -12,7 +12,7 @@
  * Example:
  * First, create a Translator instance.
  *
- * > var translator = new Jate.Translator();
+ * > var translator = new Translator();
  *
  * Then, load translations.
  *

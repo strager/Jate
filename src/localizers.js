@@ -1,5 +1,5 @@
 /*
- * Namespace: Jate.Localizers
+ * Namespace: Localizers
  * Localizers are formats usable in the Formatter class.  The functions in this
  * namespace are constructors which give functions which are the actual
  * formats.  This allows customization for specific locales; the DateFormatter
@@ -7,8 +7,8 @@
  * month name translation, for example.
  *
  * Example:
- * > formatter.addFormat('default', Jate.Localizers.Stringifier());
- * > formatter.addFormat('l j F Y', Jate.Localizers.DateFormatter('c', translator));
+ * > formatter.addFormat('default', Localizers.Stringifier());
+ * > formatter.addFormat('l j F Y', Localizers.DateFormatter('c', translator));
  * >
  * > formatter('Today is {0@}', UDate.FromDate(new Date()));
  */
@@ -166,7 +166,7 @@ exports.Pluralizer = function (indexerFunction) {
  *                 specified in the format itself.
  * translator - Translation function to use for
  *              translatable parts of the returned
- *              format.  See: Jate.UDate.format.
+ *              format.  See: UDate.format.
  */
 exports.DateFormatter = function (defaultFormat, translator) {
     function format(value, options) {

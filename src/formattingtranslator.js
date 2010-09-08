@@ -1,5 +1,5 @@
 /*
- * Class: Jate.FormattingTranslator
+ * Class: FormattingTranslator
  * FormattingTranslator is a class which first translates
  * a given format, then formats it with the given parameters.
  * It is provided as a convenience for the common operation of
