@@ -1,100 +1,112 @@
-test('Localizers', {
-    testStringifier: function () {
-        var f = Jate.Localizers.Stringifier();
+(function() {
+    var assert = require('assert');
+    var Localizers = require('../src/localizers');
+    var UDate = require('../src/udate').UDate;
 
-        assertEquals('fsdf$', f('fsdf$'));
-        assertEquals('5451', f(5451));
-        assertEquals('poo', f({
+    exports.testStringifier = function () {
+        var f = Localizers.Stringifier();
+
+        assert.equal('fsdf$', f('fsdf$'));
+        assert.equal('5451', f(5451));
+        assert.equal('poo', f({
             toString: function () {
                 return 'poo';
             }
         }));
     },
 
-    testNumberFormatter: function () {
-        var f = Jate.Localizers.NumberFormatter();
+    exports.testNumberFormatter = function () {
+        var f = Localizers.NumberFormatter();
 
-        assertEquals('54678', f(54678));
-        assertEquals('     54678', f(54678, '10.'));
-        assertEquals('0000054678', f(54678, '010.'));
-        assertEquals('54.678', f(54.678));
-        assertEquals('54.68', f(54.678, '.2'));
-        assertEquals('  54.68', f(54.678, '4.2'));
-        assertEquals('  54.678', f(54.678, '4.'));
-        assertEquals('0054.68', f(54.678, '04.2'));
-        assertEquals('0054.678', f(54.678, '04.'));
+        assert.equal('54678', f(54678));
+        assert.equal('     54678', f(54678, '10.'));
+        assert.equal('0000054678', f(54678, '010.'));
+        assert.equal('54.678', f(54.678));
+        assert.equal('54.68', f(54.678, '.2'));
+        assert.equal('  54.68', f(54.678, '4.2'));
+        assert.equal('  54.678', f(54.678, '4.'));
+        assert.equal('0054.68', f(54.678, '04.2'));
+        assert.equal('0054.678', f(54.678, '04.'));
     },
 
-    testPluralizerGetIndexCallsCallback: function () {
-        expectAsserts(2);
+    exports.testPluralizerGetIndexCallsCallback = function () {
+        var expectedAsserts = 2, asserts = 0;
 
-        var p = Jate.Localizers.Pluralizer(function (count) {
-            assertEquals(42, count);
+        var p = Localizers.Pluralizer(function (count) {
+            assert.equal(42, count);
+            ++asserts;
 
             return 69;
         });
 
-        assertEquals(69, p.getIndex(42));
+        assert.equal(69, p.getIndex(42));
+        ++asserts;
+
+        assert.equal(expectedAsserts, asserts, 'expected asserts');
     },
 
-    testPluralizerPluralize: function () {
-        var p = Jate.Localizers.Pluralizer(function (count) {
+    exports.testPluralizerPluralize = function () {
+        var p = Localizers.Pluralizer(function (count) {
             return Math.abs(Math.floor(count));
         });
 
-        assertEquals('two', p.pluralize(2, [ 'zero', 'one', 'two' ]));
-        assertEquals('zero', p.pluralize(0, [ 'zero', 'one', 'two' ]));
-        assertEquals('one', p.pluralize(-1, [ 'zero', 'one', 'two' ]));
-        assertEquals('two', p.pluralize(2.999, [ 'zero', 'one', 'two' ]));
+        assert.equal('two', p.pluralize(2, [ 'zero', 'one', 'two' ]));
+        assert.equal('zero', p.pluralize(0, [ 'zero', 'one', 'two' ]));
+        assert.equal('one', p.pluralize(-1, [ 'zero', 'one', 'two' ]));
+        assert.equal('two', p.pluralize(2.999, [ 'zero', 'one', 'two' ]));
     },
 
-    testPluralizerPluralizeOutOfRangeThrows: function () {
-        var p = Jate.Localizers.Pluralizer(function (count) {
+    exports.testPluralizerPluralizeOutOfRangeThrows = function () {
+        var p = Localizers.Pluralizer(function (count) {
             return count;
         });
 
-        assertThrows('Error', function () {
+        assert.throws(function () {
             p.pluralize(0, [ ]);
-        });
+        }, 'Error');
 
-        assertThrows('Error', function () {
+        assert.throws(function () {
             p.pluralize(1, [ ]);
-        });
+        }, 'Error');
 
-        assertThrows('Error', function () {
+        assert.throws(function () {
             p.pluralize(0.1, [ 'o' ]);
-        });
+        }, 'Error');
 
-        assertThrows('Error', function () {
+        assert.throws(function () {
             p.pluralize(-1, [ 'o', 'x' ]);
-        });
+        }, 'Error');
     },
 
-    testPluralizerFormatter: function () {
+    exports.testPluralizerFormatter = function () {
         var callCount = 0;
 
-        var p = Jate.Localizers.Pluralizer(function (count) {
+        var p = Localizers.Pluralizer(function (count) {
             return Math.abs(Math.floor(count));
         });
 
-        assertEquals('two', p(2, 'zero|one|two'));
-        assertEquals('zero', p(0, 'zero|one|two'));
-        assertEquals('one', p(-1, 'zero|one|two'));
-        assertEquals('two', p(2.999, 'zero|one|two'));
+        assert.equal('two', p(2, 'zero|one|two'));
+        assert.equal('zero', p(0, 'zero|one|two'));
+        assert.equal('one', p(-1, 'zero|one|two'));
+        assert.equal('two', p(2.999, 'zero|one|two'));
     },
 
-    testDateFormatterDefault: function () {
-        var d = Jate.Localizers.DateFormatter('c'),
-            date = Jate.UDate(2004, 2, 12, 15, 19, 21);
+    exports.testDateFormatterDefault = function () {
+        var d = Localizers.DateFormatter('c'),
+            date = UDate(2004, 2, 12, 15, 19, 21);
 
-        assertEquals('2004-03-12T15:19:21+00:00', d(date));
-        assertEquals('2004-03-12T15:19:21+00:00', d(date, ''));
+        assert.equal('2004-03-12T15:19:21+00:00', d(date));
+        assert.equal('2004-03-12T15:19:21+00:00', d(date, ''));
     },
 
-    testDateFormatterCustom: function () {
-        var d = Jate.Localizers.DateFormatter(),
-            date = Jate.UDate(2004, 2, 12, 15, 19, 21);
+    exports.testDateFormatterCustom = function () {
+        var d = Localizers.DateFormatter(),
+            date = UDate(2004, 2, 12, 15, 19, 21);
 
-        assertEquals('2004-03-12T15:19:21+00:00', d(date, 'c'));
+        assert.equal('2004-03-12T15:19:21+00:00', d(date, 'c'));
     }
-});
+
+    if (require.main === module) {
+        require('patr/runner').run(exports);
+    }
+})();
