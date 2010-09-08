@@ -19,7 +19,7 @@
  * ... - Arguments to substitute while formatting.
  * 
  */
-Jate.FormattingTranslator = function (formatter, translator) {
+exports.FormattingTranslator = function (formatter, translator) {
     function ft() {
         var args = [ ], i;
 
