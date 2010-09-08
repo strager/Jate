@@ -1,5 +1,16 @@
 /*
  * Namespace: Jate.Localizers
+ * Localizers are formats usable in the Formatter class.  The functions in this
+ * namespace are constructors which give functions which are the actual
+ * formats.  This allows customization for specific locales; the DateFormatter
+ * localizer can be given a default date format and a translator for day and
+ * month name translation, for example.
+ *
+ * Example:
+ * > formatter.addFormat('default', new Jate.Localizers.Stringifier());
+ * > formatter.addFormat('l j F Y', new Jate.Localizers.DateFormatter('c', translator));
+ * >
+ * > formatter('Today is {0@}', UDate.FromDate(new Date()));
  */
 Jate.Localizers = {
     /*
@@ -144,6 +155,11 @@ Jate.Localizers = {
     /*
      * Constructor: DateFormatter
      * Formats a given UDate.
+     *
+     * The translator passed is used to translate human parts of the date.
+     * For example, the string 'Sunday' could be passed to the translator
+     * and replaced with the translated string in the output if the date
+     * format requires the week day.
      *
      * Parameters:
      * defaultFormat - The date format to use if none is
