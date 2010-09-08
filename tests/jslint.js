@@ -21,7 +21,7 @@
         eqeqeq: true,
         bitwise: true,
         newcap: false,
-        immed: false,   // TODO Enable
+        immed: true,
         browser: false,
         white: true,
         predef: [
@@ -42,4 +42,4 @@
     if (require.main === module) {
         require('patr/runner').run(exports);
     }
-})();
+}());
