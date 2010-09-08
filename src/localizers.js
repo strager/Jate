@@ -1,7 +1,7 @@
 /*
- * Namespace: Jate.Formatters
+ * Namespace: Jate.Localizers
  */
-Jate.Formatters = {
+Jate.Localizers = {
     /*
      * Constructor: Stringifier
      * Converts the value into a string.

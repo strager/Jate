@@ -1,6 +1,6 @@
-test('Formatters', {
+test('Localizers', {
     testStringifier: function () {
-        var f = new Jate.Formatters.Stringifier();
+        var f = new Jate.Localizers.Stringifier();
 
         assertEquals('fsdf$', f('fsdf$'));
         assertEquals('5451', f(5451));
@@ -12,7 +12,7 @@ test('Formatters', {
     },
 
     testNumberFormatter: function () {
-        var f = new Jate.Formatters.NumberFormatter();
+        var f = new Jate.Localizers.NumberFormatter();
 
         assertEquals('54678', f(54678));
         assertEquals('     54678', f(54678, '10.'));
@@ -28,7 +28,7 @@ test('Formatters', {
     testPluralizerGetIndexCallsCallback: function () {
         expectAsserts(2);
 
-        var p = new Jate.Formatters.Pluralizer(function (count) {
+        var p = new Jate.Localizers.Pluralizer(function (count) {
             assertEquals(42, count);
 
             return 69;
@@ -38,7 +38,7 @@ test('Formatters', {
     },
 
     testPluralizerPluralize: function () {
-        var p = new Jate.Formatters.Pluralizer(function (count) {
+        var p = new Jate.Localizers.Pluralizer(function (count) {
             return Math.abs(Math.floor(count));
         });
 
@@ -49,7 +49,7 @@ test('Formatters', {
     },
 
     testPluralizerPluralizeOutOfRangeThrows: function () {
-        var p = new Jate.Formatters.Pluralizer(function (count) {
+        var p = new Jate.Localizers.Pluralizer(function (count) {
             return count;
         });
 
@@ -73,7 +73,7 @@ test('Formatters', {
     testPluralizerFormatter: function () {
         var callCount = 0;
 
-        var p = new Jate.Formatters.Pluralizer(function (count) {
+        var p = new Jate.Localizers.Pluralizer(function (count) {
             return Math.abs(Math.floor(count));
         });
 
@@ -84,7 +84,7 @@ test('Formatters', {
     },
 
     testDateFormatterDefault: function () {
-        var d = new Jate.Formatters.DateFormatter('c'),
+        var d = new Jate.Localizers.DateFormatter('c'),
             date = new Jate.UDate(2004, 2, 12, 15, 19, 21);
 
         assertEquals('2004-03-12T15:19:21+00:00', d(date));
@@ -92,7 +92,7 @@ test('Formatters', {
     },
 
     testDateFormatterCustom: function () {
-        var d = new Jate.Formatters.DateFormatter(),
+        var d = new Jate.Localizers.DateFormatter(),
             date = new Jate.UDate(2004, 2, 12, 15, 19, 21);
 
         assertEquals('2004-03-12T15:19:21+00:00', d(date, 'c'));
