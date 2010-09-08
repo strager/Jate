@@ -1,87 +1,93 @@
-test('Translator', {
-    testNoTranslate: function () {
-        var translator = Jate.Translator();
+(function() {
+    var assert = require('assert');
+    var Translator = require('../src/translator').Translator;
 
-        assertEquals('foobar is cool', translator.translate('foobar is cool'));
-        assertEquals('{0}, {1}', translator.translate('{0}, {1}'));
-    },
+    exports.testNoTranslate = function () {
+        var translator = Translator();
 
-    testAddTranslationToEmpty: function () {
-        var translator = Jate.Translator();
+        assert.equal('foobar is cool', translator.translate('foobar is cool'));
+        assert.equal('{0}; {1}', translator.translate('{0}; {1}'));
+    };
+
+    exports.testAddTranslationToEmpty = function () {
+        var translator = Translator();
 
         translator.addTranslation('foobar is very cool', 'foobar est tr\u00E9s cool');
 
-        assertEquals('foobar est tr\u00E9s cool', translator.translate('foobar is very cool'));
-        assertEquals('{0}, {1}', translator.translate('{0}, {1}'));
-    },
+        assert.equal('foobar est tr\u00E9s cool', translator.translate('foobar is very cool'));
+        assert.equal('{0}; {1}', translator.translate('{0}; {1}'));
+    };
 
-    testAddTranslationsToEmpty: function () {
-        var translator = Jate.Translator();
+    exports.testAddTranslationsToEmpty = function () {
+        var translator = Translator();
 
         translator.addTranslations({
             'foobar is very cool': 'foobar est tr\u00E9s cool',
-            '{0} {1}': '{1}, {0}'
+            '{0} {1}': '{1}; {0}'
         });
 
-        assertEquals('foobar est tr\u00E9s cool', translator.translate('foobar is very cool'));
-        assertEquals('{1}, {0}', translator.translate('{0} {1}'));
-    },
+        assert.equal('foobar est tr\u00E9s cool', translator.translate('foobar is very cool'));
+        assert.equal('{1}; {0}', translator.translate('{0} {1}'));
+    };
 
-    testAddTranslationToExistingReplaces: function () {
-        var translator = Jate.Translator();
+    exports.testAddTranslationToExistingReplaces = function () {
+        var translator = Translator();
 
         translator.addTranslation('foobar is very cool', 'foobar n\'est pas cool');
         translator.addTranslation('foobar is very cool', 'foobar est tr\u00E9s cool');
 
-        assertEquals('foobar est tr\u00E9s cool', translator.translate('foobar is very cool'));
-        assertEquals('{0}, {1}', translator.translate('{0}, {1}'));
-    },
+        assert.equal('foobar est tr\u00E9s cool', translator.translate('foobar is very cool'));
+        assert.equal('{0}; {1}', translator.translate('{0}; {1}'));
+    };
 
-    testAddTranslationsToExistingReplaces: function () {
-        var translator = Jate.Translator();
+    exports.testAddTranslationsToExistingReplaces = function () {
+        var translator = Translator();
 
         translator.addTranslations({
             'foobar is very cool': 'foobar est si cool, n\'est-ce pas?',
-            '{0} {1}': 'quoi {1}, {0}'
+            '{0} {1}': 'quoi {1}; {0}'
         });
 
         translator.addTranslations({
-            '{0} {1}': '{1}, {0}',
+            '{0} {1}': '{1}; {0}',
             'foobar is very cool': 'foobar est tr\u00E9s cool'
         });
 
-        assertEquals('foobar est tr\u00E9s cool', translator.translate('foobar is very cool'));
-        assertEquals('{1}, {0}', translator.translate('{0} {1}'));
-    },
+        assert.equal('foobar est tr\u00E9s cool', translator.translate('foobar is very cool'));
+        assert.equal('{1}; {0}', translator.translate('{0} {1}'));
+    };
 
-    testAddContextualTranslationCoexistsWithExisting: function () {
-        var translator = Jate.Translator();
+    exports.testAddContextualTranslationCoexistsWithExisting = function () {
+        var translator = Translator();
 
         translator.addTranslation('source', 'origin');
         translator.addTranslation('source', 'context', 'traduction');
 
-        assertEquals('origin', translator.translate('source'));
-        assertEquals('traduction', translator.translate('source', 'context'));
-    },
+        assert.equal('origin', translator.translate('source'));
+        assert.equal('traduction', translator.translate('source', 'context'));
+    };
 
-    testAddContextualTranslationDoesNotAddNoContext: function () {
-        var translator = Jate.Translator();
+    exports.testAddContextualTranslationDoesNotAddNoContext = function () {
+        var translator = Translator();
 
         translator.addTranslation('source', 'context', 'traduction');
 
-        assertEquals('source', translator.translate('source'));
-    },
+        assert.equal('source', translator.translate('source'));
+    };
 
-    testAddContextualTranslationWithNullCharThrows: function () {
-        var translator = Jate.Translator();
+    exports.testAddContextualTranslationWithNullCharThrows = function () {
+        var translator = Translator();
 
-        assertThrows('Error', function () {
+        assert.throws(function () {
             translator.addTranslation('source', 'c\x000kies', 'traduction');
-        });
+        }, 'Error');
 
-        assertThrows('Error', function () {
+        assert.throws(function () {
             translator.addTranslation('s\x00urce', 'c00kies', 'traduction');
-        });
-    }
-});
+        }, 'Error');
+    };
 
+    if (require.main === module) {
+        require('patr/runner').run(exports);
+    }
+})();

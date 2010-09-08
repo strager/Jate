@@ -30,9 +30,9 @@
  * > translator.translate('Exit', 'Program exit'); // 'Quitter'
  * > translator.translate('Exit', 'Exit door'); // 'Sortie'
  */
-Jate.Translator = function () {
-    if (!(this instanceof Jate.Translator)) {
-        return new Jate.Translator();
+exports.Translator = function () {
+    if (!(this instanceof exports.Translator)) {
+        return new exports.Translator();
     }
 
     var sourcePrefix = '\x00\x00';
