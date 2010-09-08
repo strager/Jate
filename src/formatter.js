@@ -22,7 +22,7 @@
  * Parameters:
  * ... - Format objects added with addFormats.
  */
-Jate.Formatter = function (/* formats... */) {
+exports.Formatter = function (/* formats... */) {
     var i;
 
     function format(text) {

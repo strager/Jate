@@ -1,25 +1,28 @@
-test('Formatter', {
-    testFormatRawStringReturnsSelf: function () {
-        var formatter = Jate.Formatter();
+(function() {
+    var assert = require('assert');
+    var Formatter = require('../src/formatter').Formatter;
 
-        assertEquals('foo', formatter('foo'));
-        assertEquals('{b0ar}x!@$!05', formatter('{b0ar}x!@$!05', '99999'));
-    },
+    exports.testFormatRawStringReturnsSelf = function () {
+        var formatter = Formatter();
 
-    testFormatDefault: function () {
-        var formatter = Jate.Formatter({
+        assert.equal('foo', formatter('foo'));
+        assert.equal('{b0ar}x!@$!05', formatter('{b0ar}x!@$!05', '99999'));
+    };
+
+    exports.testFormatDefault = function () {
+        var formatter = Formatter({
             'default': function (value) {
                 return value.toString ? value.toString() : value + '';
             }
         });
 
-        assertEquals('barx', formatter('ba{0}', 'rx'));
-        assertEquals('This is a test', formatter('{0} {1} {2} {3}', 'This', 'is', 'a', 'test'));
-        assertEquals('Hello, world', formatter('{2}, {1}', 'bad', 'world', 'Hello'));
-    },
+        assert.equal('barx', formatter('ba{0}', 'rx'));
+        assert.equal('This is a test', formatter('{0} {1} {2} {3}', 'This', 'is', 'a', 'test'));
+        assert.equal('Hello, world', formatter('{2}, {1}', 'bad', 'world', 'Hello'));
+    };
 
-    testFormatCustom: function () {
-        var formatter = Jate.Formatter({
+    exports.testFormatCustom = function () {
+        var formatter = Formatter({
             '$': function (value) {
                 return value.toFixed(2);
             },
@@ -33,60 +36,60 @@ test('Formatter', {
             }
         });
 
-        assertEquals('over 9000.00', formatter('over {0$}', 9000));
-        assertEquals('You have 2 cows; I have 1 cow', formatter('You have {0#} {0|cows|cow|cows}; I have {1#} {1|cows|cow|cows}', 2, 1));
-    },
+        assert.equal('over 9000.00', formatter('over {0$}', 9000));
+        assert.equal('You have 2 cows; I have 1 cow', formatter('You have {0#} {0|cows|cow|cows}; I have {1#} {1|cows|cow|cows}', 2, 1));
+    };
 
-    testFormatEscape: function () {
-        var formatter = Jate.Formatter();
+    exports.testFormatEscape = function () {
+        var formatter = Formatter();
 
-        assertEquals('foo{0bar}', formatter('foo\\{0bar}'));
-    },
+        assert.equal('foo{0bar}', formatter('foo\\{0bar}'));
+    };
 
-    testNoPlaceholderFunctionThrows: function () {
-        var formatter = Jate.Formatter();
+    exports.testNoPlaceholderFunctionThrows = function () {
+        var formatter = Formatter();
 
-        assertThrows('Error', function () {
+        assert.throws(function () {
             formatter.formatPlaceholder('0', [ 'wootpoot' ]);
-        });
+        }, 'Error');
 
-        assertThrows('Error', function () {
+        assert.throws(function () {
             formatter.formatPlaceholder('2', [ 0, '9', { 'x': 'y' } ]);
-        });
-    },
+        }, 'Error');
+    };
 
-    testBadPlaceholderFormatThrows: function () {
-        var formatter = Jate.Formatter({
+    exports.testBadPlaceholderFormatThrows = function () {
+        var formatter = Formatter({
             'default': function () { }
         });
 
-        assertThrows('Error', function () {
+        assert.throws(function () {
             formatter.formatPlaceholder('x1');
-        });
+        }, 'Error');
 
-        assertThrows('Error', function () {
+        assert.throws(function () {
             formatter.formatPlaceholder(' 5');
-        });
-    },
+        }, 'Error');
+    };
 
-    testOutOfRangePlaceholderThrows: function () {
-        var formatter = Jate.Formatter({
+    exports.testOutOfRangePlaceholderThrows = function () {
+        var formatter = Formatter({
             'default': function () { }
         });
 
-        assertThrows('Error', function () {
+        assert.throws(function () {
             formatter.formatPlaceholder('0', [ ]);
-        });
+        }, 'Error');
 
-        assertThrows('Error', function () {
+        assert.throws(function () {
             formatter.formatPlaceholder('2', [ 'foo', 546 ]);
-        });
-    },
+        }, 'Error');
+    };
 
-    testDefaultPlaceholderCallsDefaultOnce: function () {
+    exports.testDefaultPlaceholderCallsDefaultOnce = function () {
         var callCount = 0;
 
-        var formatter = Jate.Formatter({
+        var formatter = Formatter({
             'default': function (value) {
                 ++callCount;
             }
@@ -94,13 +97,13 @@ test('Formatter', {
 
         formatter.formatPlaceholder('0', [ 0 ]);
 
-        assertEquals(1, callCount);
-    },
+        assert.equal(1, callCount);
+    };
 
-    testDefaultPlaceholderCallsDefaultWithValue: function () {
+    exports.testDefaultPlaceholderCallsDefaultWithValue = function () {
         var callValue;
 
-        var formatter = Jate.Formatter({
+        var formatter = Formatter({
             'default': function (value) {
                 callValue = value;
             }
@@ -108,23 +111,23 @@ test('Formatter', {
 
         formatter.formatPlaceholder('0', [ 10 ]);
 
-        assertEquals(10, callValue);
-    },
+        assert.equal(10, callValue);
+    };
 
-    testDefaultPlaceholderUsesReturnValue: function () {
-        var formatter = Jate.Formatter({
+    exports.testDefaultPlaceholderUsesReturnValue = function () {
+        var formatter = Formatter({
             'default': function (value) {
                 return 'bar';
             }
         });
 
-        assertEquals('bar', formatter.formatPlaceholder('0', [ 0 ]));
-    },
+        assert.equal('bar', formatter.formatPlaceholder('0', [ 0 ]));
+    };
 
-    testCustomPlaceholderCallsDefault: function () {
+    exports.testCustomPlaceholderCallsDefault = function () {
         var callCustom;
 
-        var formatter = Jate.Formatter({
+        var formatter = Formatter({
             'default': function (value, custom) {
                 callCustom = custom;
             }
@@ -132,13 +135,13 @@ test('Formatter', {
 
         formatter.formatPlaceholder('0fdf~w00t', [ 0 ]);
 
-        assertEquals('fdf~w00t', callCustom);
-    },
+        assert.equal('fdf~w00t', callCustom);
+    };
 
-    testCustomPlaceholderCallsCustomOnce: function () {
+    exports.testCustomPlaceholderCallsCustomOnce = function () {
         var callCount = 0;
 
-        var formatter = Jate.Formatter({
+        var formatter = Formatter({
             '~': function (value) {
                 ++callCount;
             }
@@ -146,13 +149,13 @@ test('Formatter', {
 
         formatter.formatPlaceholder('0~', [ 0 ]);
 
-        assertEquals(1, callCount);
-    },
+        assert.equal(1, callCount);
+    };
 
-    testExtendedCustomPlaceholderCallsCustomOnce: function () {
+    exports.testExtendedCustomPlaceholderCallsCustomOnce = function () {
         var callCount = 0;
 
-        var formatter = Jate.Formatter({
+        var formatter = Formatter({
             '~': function (value) {
                 ++callCount;
             }
@@ -160,14 +163,14 @@ test('Formatter', {
 
         formatter.formatPlaceholder('0~@#$', [ 0 ]);
 
-        assertEquals(1, callCount);
-    },
+        assert.equal(1, callCount);
+    };
 
-    testExtendedCustomPlaceholderCallsProperCustomOnce: function () {
+    exports.testExtendedCustomPlaceholderCallsProperCustomOnce = function () {
         var callCount = 0;
         var badCallCount = 0;
 
-        var formatter = Jate.Formatter({
+        var formatter = Formatter({
             'default': function (value) {
                 ++badCallCount;
             },
@@ -183,14 +186,14 @@ test('Formatter', {
 
         formatter.formatPlaceholder('0~@#$', [ 0 ]);
 
-        assertEquals(1, callCount);
-        assertEquals(0, badCallCount);
-    },
+        assert.equal(1, callCount);
+        assert.equal(0, badCallCount);
+    };
 
-    testCustomPlaceholderCallsCustomWithValue: function () {
+    exports.testCustomPlaceholderCallsCustomWithValue = function () {
         var callValue;
 
-        var formatter = Jate.Formatter({
+        var formatter = Formatter({
             '~': function (value) {
                 callValue = value;
             }
@@ -198,16 +201,20 @@ test('Formatter', {
 
         formatter.formatPlaceholder('0~', [ 10 ]);
 
-        assertEquals(10, callValue);
-    },
+        assert.equal(10, callValue);
+    };
 
-    testCustomPlaceholderUsesCustomReturnValue: function () {
-        var formatter = Jate.Formatter({
+    exports.testCustomPlaceholderUsesCustomReturnValue = function () {
+        var formatter = Formatter({
             '~': function (value) {
                 return 'bar';
             }
         });
 
-        assertEquals('bar', formatter.formatPlaceholder('0~', [ 0 ]));
+        assert.equal('bar', formatter.formatPlaceholder('0~', [ 0 ]));
+    };
+
+    if (require.main === module) {
+        require('patr/runner').run(exports);
     }
-});
+})();
