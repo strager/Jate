@@ -1,5 +1,5 @@
 /*
- * Class: Jate.UDate
+ * Class: exports.UDate
  * UDate represents a date and time, coupled with timezone information.
  *
  * Unlike the native Date class, UDate's representation does not change
@@ -42,10 +42,10 @@
  *
  * year, month, day, hour, minute, second, millisecond, utcOffset
  */ 
-Jate.UDate = function (year, month, day, hour, minute, second, millisecond, utcOffset) {
-    if (!(this instanceof Jate.UDate)) {
+exports.UDate = function (year, month, day, hour, minute, second, millisecond, utcOffset) {
+    if (!(this instanceof exports.UDate)) {
         // FIXME Help me DRY this up
-        return new Jate.UDate(year, month, day, hour, minute, second, millisecond, utcOffset);
+        return new exports.UDate(year, month, day, hour, minute, second, millisecond, utcOffset);
     }
 
     var i, args;
@@ -82,8 +82,8 @@ Jate.UDate = function (year, month, day, hour, minute, second, millisecond, utcO
  * Parameters:
  * date - Date object to convert.
  */
-Jate.UDate.FromDate = function (date) {
-    return Jate.UDate({
+exports.UDate.FromDate = function (date) {
+    return exports.UDate({
         'year': date.getFullYear(),
         'month': date.getMonth(),
         'day': date.getDate(),
@@ -102,9 +102,9 @@ Jate.UDate.FromDate = function (date) {
  * Parameters:
  * unixTime - Number of seconds from the UNIX epoch (1970-01-01T00:00:00Z).
  */
-Jate.UDate.FromUnixTime = function (unixTime) {
+exports.UDate.FromUnixTime = function (unixTime) {
     var date = new Date(unixTime * 1000);
-    var utc = Jate.UDate.FromDate(date).toUtc();
+    var utc = exports.UDate.FromDate(date).toUtc();
 
     return utc;
 };
@@ -117,7 +117,7 @@ Jate.UDate.FromUnixTime = function (unixTime) {
  * Returns:
  * New UDate instance with local timezone.
  */
-Jate.UDate.prototype.toLocal = function () {
+exports.UDate.prototype.toLocal = function () {
     return this.toTimezone(-Date.getTimezoneOffset());
 };
 
@@ -129,7 +129,7 @@ Jate.UDate.prototype.toLocal = function () {
  * Returns:
  * New UDate instance with GMT timezone.
  */
-Jate.UDate.prototype.toUtc = function () {
+exports.UDate.prototype.toUtc = function () {
     return this.toTimezone(0);
 };
 
@@ -144,8 +144,8 @@ Jate.UDate.prototype.toUtc = function () {
  * Returns:
  * New UDate instance with utcOffset.
  */
-Jate.UDate.prototype.toTimezone = function (utcOffset) {
-    var date = Jate.UDate(this),
+exports.UDate.prototype.toTimezone = function (utcOffset) {
+    var date = exports.UDate(this),
         utcOffsetDelta = utcOffset - date.utcOffset;
 
     date.utcOffset = utcOffset;
@@ -161,7 +161,7 @@ Jate.UDate.prototype.toTimezone = function (utcOffset) {
  * Returns:
  * The number of seconds since the UNIX epoch.
  */
-Jate.UDate.prototype.toUnixTime = function () {
+exports.UDate.prototype.toUnixTime = function () {
     var tempDate = this.toUtc();
 
     return Date.UTC(
@@ -183,7 +183,7 @@ Jate.UDate.prototype.toUnixTime = function () {
  * Date instance representing the same time as the
  * UDate instance.
  */
-Jate.UDate.prototype.toDate = function () {
+exports.UDate.prototype.toDate = function () {
     return new Date(this.toUnixTime() * 1000);
 };
 
@@ -200,7 +200,7 @@ Jate.UDate.prototype.toDate = function () {
  * Returns:
  * Normalized UDate instance.
  */
-Jate.UDate.prototype.normalized = function () {
+exports.UDate.prototype.normalized = function () {
     var tempDate = new Date(Date.UTC(
         this.year,
         this.month,
@@ -211,7 +211,7 @@ Jate.UDate.prototype.normalized = function () {
         this.millisecond
     ));
 
-    return Jate.UDate(
+    return exports.UDate(
         tempDate.getUTCFullYear(),
         tempDate.getUTCMonth(),
         tempDate.getUTCDate(),
@@ -235,7 +235,7 @@ Jate.UDate.prototype.normalized = function () {
  * Returns:
  * true if the year is a leap year; false otherwise.
  */
-Jate.UDate.isLeapYear = function (year) {
+exports.UDate.isLeapYear = function (year) {
     return (year % 4 === 0 && year % 100 !== 0) ||
            (year % 400 === 0);
 };
@@ -244,8 +244,8 @@ Jate.UDate.isLeapYear = function (year) {
  * Method: isLeapYear
  * See: static isLeapYear
  */
-Jate.UDate.prototype.isLeapYear = function () {
-    return Jate.UDate.isLeapYear(this.year);
+exports.UDate.prototype.isLeapYear = function () {
+    return exports.UDate.isLeapYear(this.year);
 };
 
 /*
@@ -259,11 +259,11 @@ Jate.UDate.prototype.isLeapYear = function () {
  * Returns:
  * The number of days in the given month.
  */
-Jate.UDate.getDaysInMonth = function (month, year /* or isLeapYear */) {
+exports.UDate.getDaysInMonth = function (month, year /* or isLeapYear */) {
     var isLeapYear;
 
     if (typeof year === 'number') {
-        isLeapYear = Jate.UDate.isLeapYear(year);
+        isLeapYear = exports.UDate.isLeapYear(year);
     } else {
         isLeapYear = !!year;
     }
@@ -282,8 +282,8 @@ Jate.UDate.getDaysInMonth = function (month, year /* or isLeapYear */) {
  * Method: getDaysInMonth
  * See: static getDaysInMonth.
  */
-Jate.UDate.prototype.getDaysInMonth = function () {
-    return Jate.UDate.getDaysInMonth(this.month, this.year);
+exports.UDate.prototype.getDaysInMonth = function () {
+    return exports.UDate.getDaysInMonth(this.month, this.year);
 };
 
 /*
@@ -302,11 +302,11 @@ Jate.UDate.prototype.getDaysInMonth = function () {
  * Returns:
  * The day of the year.
  */
-Jate.UDate.getDayOfYear = function (day, month, year) {
+exports.UDate.getDayOfYear = function (day, month, year) {
     var curMonth;
 
     for (curMonth = 0; curMonth < month; ++curMonth) {
-        day += Jate.UDate.getDaysInMonth(curMonth, year);
+        day += exports.UDate.getDaysInMonth(curMonth, year);
     }
 
     return day - 1;
@@ -316,8 +316,8 @@ Jate.UDate.getDayOfYear = function (day, month, year) {
  * Method: getDayOfYear
  * See: static getDayOfYear
  */
-Jate.UDate.prototype.getDayOfYear = function () {
-    return Jate.UDate.getDayOfYear(this.day, this.month, this.year);
+exports.UDate.prototype.getDayOfYear = function () {
+    return exports.UDate.getDayOfYear(this.day, this.month, this.year);
 };
 
 /*
@@ -329,7 +329,7 @@ Jate.UDate.prototype.getDayOfYear = function () {
  * Returns:
  * Index of the day of the week.
  */
-Jate.UDate.prototype.getDayOfWeek = function () {
+exports.UDate.prototype.getDayOfWeek = function () {
     return this.toDate().getUTCDay();
 };
 
@@ -337,15 +337,15 @@ Jate.UDate.prototype.getDayOfWeek = function () {
  * Method: getWeekOfYear
  * TODO Document.
  */
-Jate.UDate.prototype.getWeekOfYear = function () {
+exports.UDate.prototype.getWeekOfYear = function () {
     var a, b, isoDayOfWeek = this.getDayOfWeek();
 
     if (isoDayOfWeek === 0) {
         isoDayOfWeek = 7;
     }
 
-    a = (Jate.UDate(this.year, this.month, this.day - isoDayOfWeek + 4)).normalized();
-    b = (Jate.UDate(a.year, 0, 4)).normalized();
+    a = (exports.UDate(this.year, this.month, this.day - isoDayOfWeek + 4)).normalized();
+    b = (exports.UDate(a.year, 0, 4)).normalized();
 
     return 1 + Math.round((a.toUnixTime() - b.toUnixTime()) / 864e2 / 7);
 };
@@ -365,7 +365,7 @@ Jate.UDate.prototype.getWeekOfYear = function () {
  * Returns:
  * Formatted date string.
  */
-Jate.UDate.prototype.format = function (format, translator) {
+exports.UDate.prototype.format = function (format, translator) {
     var func = arguments.callee,
         replacements = func.replaceChars,
         returnStr = '',
@@ -411,7 +411,7 @@ Jate.UDate.prototype.format = function (format, translator) {
         return ret;
     }
 
-    var r = Jate.UDate.prototype.format.replaceChars = {
+    var r = exports.UDate.prototype.format.replaceChars = {
         shortMonths: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         longMonths: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         shortDays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],

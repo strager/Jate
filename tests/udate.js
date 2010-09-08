@@ -1,5 +1,9 @@
-test('UDate', {
-    testFlatConstructorSetsFields: function () {
+(function() {
+    var UDate = require('../src/udate').UDate;
+    var assert = require('assert');
+    var assertHasFieldsSet = require('./extensions').hasFieldsSet;
+
+    exports.testFlatConstructorSetsFields = function () {
         assertHasFieldsSet.call(this, {
             'year': 2007,
             'month': 4,
@@ -9,7 +13,7 @@ test('UDate', {
             'second': 59,
             'millisecond': 400,
             'utcOffset': 0
-        }, Jate.UDate(
+        }, UDate(
             2007,
             4,
             22,
@@ -21,7 +25,7 @@ test('UDate', {
         ));
     },
 
-    testObjectConstructorSetsFields: function () {
+    exports.testObjectConstructorSetsFields = function () {
         assertHasFieldsSet.call(this, {
             'year': 2007,
             'month': 4,
@@ -31,7 +35,7 @@ test('UDate', {
             'second': 59,
             'millisecond': 400,
             'utcOffset': 0
-        }, Jate.UDate({
+        }, UDate({
             'year': 2007,
             'month': 4,
             'day': 22,
@@ -43,7 +47,7 @@ test('UDate', {
         }));
     },
 
-    testFromDate: function () {
+    exports.testFromDate = function () {
         assertHasFieldsSet.call(this, {
             'year': 2007,
             'month': 4,
@@ -52,7 +56,7 @@ test('UDate', {
             'minute': 16,
             'second': 59,
             'millisecond': 400
-        }, Jate.UDate.FromDate(new Date(
+        }, UDate.FromDate(new Date(
             2007,
             4,
             22,
@@ -63,7 +67,7 @@ test('UDate', {
         )));
     },
 
-    testToTimezone: function () {
+    exports.testToTimezone = function () {
         assertHasFieldsSet.call(this, {
             'year': 2007,
             'month': 4,
@@ -73,7 +77,7 @@ test('UDate', {
             'second': 59,
             'millisecond': 400,
             'utcOffset': 0
-        }, Jate.UDate(
+        }, UDate(
             2007,
             4,
             22,
@@ -85,7 +89,7 @@ test('UDate', {
         ).toTimezone(0));
     },
 
-    testNormalized: function () {
+    exports.testNormalized = function () {
         assertHasFieldsSet.call(this, {
             'year': 2001,
             'month': 1,
@@ -95,7 +99,7 @@ test('UDate', {
             'second': 1,
             'millisecond': 0,
             'utcOffset': 0
-        }, Jate.UDate(
+        }, UDate(
             2000,
             12,
             31,
@@ -115,7 +119,7 @@ test('UDate', {
             'second': 59,
             'millisecond': 999,
             'utcOffset': 0
-        }, Jate.UDate(
+        }, UDate(
             2000,
             0,
             0,
@@ -127,7 +131,7 @@ test('UDate', {
         ).normalized());
     },
 
-    testFromUnixTime: function () {
+    exports.testFromUnixTime = function () {
         assertHasFieldsSet.call(this, {
             'year': 2003,
             'month': 8,
@@ -137,7 +141,7 @@ test('UDate', {
             'second': 40,
             'millisecond': 0,
             'utcOffset': 0
-        }, Jate.UDate.FromUnixTime(1062402400));
+        }, UDate.FromUnixTime(1062402400));
 
         assertHasFieldsSet.call(this, {
             'year': 2010,
@@ -148,11 +152,11 @@ test('UDate', {
             'second': 0,
             'millisecond': 820,
             'utcOffset': 0
-        }, Jate.UDate.FromUnixTime(1293750000.82));
+        }, UDate.FromUnixTime(1293750000.82));
     },
 
-    testToUnixTime: function () {
-        assertEquals(1062402400, Jate.UDate({
+    exports.testToUnixTime = function () {
+        assert.equal(1062402400, UDate({
             'year': 2003,
             'month': 8,
             'day': 1,
@@ -163,7 +167,7 @@ test('UDate', {
             'utcOffset': 0
         }).toUnixTime());
 
-        assertEquals(1293750000.82, Jate.UDate({
+        assert.equal(1293750000.82, UDate({
             'year': 2010,
             'month': 11,
             'day': 30,
@@ -175,116 +179,124 @@ test('UDate', {
         }).toUnixTime());
     },
 
-    testGetDayOfWeek: function () {
-        assertEquals(1, (Jate.UDate.FromUnixTime(1062419200)).getDayOfWeek());
-        assertEquals(2, (Jate.UDate.FromUnixTime(1062505600)).getDayOfWeek());
-        assertEquals(3, (Jate.UDate.FromUnixTime(1062592000)).getDayOfWeek());
-        assertEquals(4, (Jate.UDate.FromUnixTime(1062678400)).getDayOfWeek());
-        assertEquals(5, (Jate.UDate.FromUnixTime(1062764800)).getDayOfWeek());
-        assertEquals(6, (Jate.UDate.FromUnixTime(1062851200)).getDayOfWeek());
-        assertEquals(0, (Jate.UDate.FromUnixTime(1062937600)).getDayOfWeek());
+    exports.testGetDayOfWeek = function () {
+        assert.equal(1, (UDate.FromUnixTime(1062419200)).getDayOfWeek());
+        assert.equal(2, (UDate.FromUnixTime(1062505600)).getDayOfWeek());
+        assert.equal(3, (UDate.FromUnixTime(1062592000)).getDayOfWeek());
+        assert.equal(4, (UDate.FromUnixTime(1062678400)).getDayOfWeek());
+        assert.equal(5, (UDate.FromUnixTime(1062764800)).getDayOfWeek());
+        assert.equal(6, (UDate.FromUnixTime(1062851200)).getDayOfWeek());
+        assert.equal(0, (UDate.FromUnixTime(1062937600)).getDayOfWeek());
     },
 
-    testFormat: function () {
-        assertEquals('2004-03-12T15:19:21+00:00', (Jate.UDate(2004, 2, 12, 15, 19, 21)).format('c'));
-        assertEquals('07:09:40 m is month', (Jate.UDate.FromUnixTime(1062402400)).format('H:m:s \\m \\i\\s \\m\\o\\n\\t\\h'));
-        assertEquals('September 2, 2003, 12:26 am', (Jate.UDate.FromUnixTime(1062462400)).format('F j, Y, g:i a'));
-        assertEquals('2003 36 2003', (Jate.UDate.FromUnixTime(1062462400)).format('Y W o'));
-        assertEquals('53', (Jate.UDate.FromUnixTime(1104534000)).format('W'));
-        assertEquals('53', (Jate.UDate.FromUnixTime(1104620400)).format('W'));
-        assertEquals('999 31', (Jate.UDate.FromUnixTime(1104533999)).format('B t'));
-        assertEquals('52 1293750000', (Jate.UDate.FromUnixTime(1293750000.82)).format('W U'));
-        assertEquals('52', (Jate.UDate.FromUnixTime(1293836400)).format('W'));
-        assertEquals('52 2011-01-02', (Jate.UDate.FromUnixTime(1293974054)).format('W Y-m-d'));
+    exports.testFormat = function () {
+        assert.equal('2004-03-12T15:19:21+00:00', (UDate(2004, 2, 12, 15, 19, 21)).format('c'));
+        assert.equal('07:09:40 m is month', (UDate.FromUnixTime(1062402400)).format('H:m:s \\m \\i\\s \\m\\o\\n\\t\\h'));
+        assert.equal('September 2, 2003, 12:26 am', (UDate.FromUnixTime(1062462400)).format('F j, Y, g:i a'));
+        assert.equal('2003 36 2003', (UDate.FromUnixTime(1062462400)).format('Y W o'));
+        assert.equal('53', (UDate.FromUnixTime(1104534000)).format('W'));
+        assert.equal('53', (UDate.FromUnixTime(1104620400)).format('W'));
+        assert.equal('999 31', (UDate.FromUnixTime(1104533999)).format('B t'));
+        assert.equal('52 1293750000', (UDate.FromUnixTime(1293750000.82)).format('W U'));
+        assert.equal('52', (UDate.FromUnixTime(1293836400)).format('W'));
+        assert.equal('52 2011-01-02', (UDate.FromUnixTime(1293974054)).format('W Y-m-d'));
     },
 
-    testFormatParts: function () {
-        var date = Jate.UDate.FromUnixTime(1234567890).toTimezone(-5 * 60);
+    exports.testFormatParts = function () {
+        var date = UDate.FromUnixTime(1234567890).toTimezone(-5 * 60);
 
-        assertEquals('a', 'pm', date.format('a'));
-        assertEquals('b', 'b', date.format('b'));
-        assertEquals('c', '2009-02-13T18:31:30-05:00', date.format('c'));
-        assertEquals('d', '13', date.format('d'));
-        //assertEquals('e', 'America/New_York', date.format('e'));
-        assertEquals('f', 'f', date.format('f'));
-        assertEquals('g', '6', date.format('g'));
-        assertEquals('h', '06', date.format('h'));
-        assertEquals('i', '31', date.format('i'));
-        assertEquals('j', '13', date.format('j'));
-        assertEquals('k', 'k', date.format('k'));
-        assertEquals('l', 'Friday', date.format('l'));
-        assertEquals('m', '02', date.format('m'));
-        assertEquals('n', '2', date.format('n'));
-        assertEquals('o', '2009', date.format('o'));
-        assertEquals('p', 'p', date.format('p'));
-        assertEquals('q', 'q', date.format('q'));
-        assertEquals('r', 'Fri, 13 Feb 2009 18:31:30 -0500', date.format('r'));
-        assertEquals('s', '30', date.format('s'));
-        assertEquals('t', '28', date.format('t'));
-        assertEquals('u', 'u', date.format('u'));
-        assertEquals('v', 'v', date.format('v'));
-        assertEquals('w', '5', date.format('w'));
-        assertEquals('x', 'x', date.format('x'));
-        assertEquals('y', '09', date.format('y'));
-        assertEquals('z', '43', date.format('z'));
-        assertEquals('A', 'PM', date.format('A'));
-        assertEquals('B', '021', date.format('B'));
-        assertEquals('C', 'C', date.format('C'));
-        assertEquals('D', 'Fri', date.format('D'));
-        assertEquals('E', 'E', date.format('E'));
-        assertEquals('F', 'February', date.format('F'));
-        assertEquals('G', '18', date.format('G'));
-        assertEquals('H', '18', date.format('H'));
-        //assertEquals('I', '0', date.format('I'));
-        assertEquals('J', 'J', date.format('J'));
-        assertEquals('K', 'K', date.format('K'));
-        assertEquals('L', '0', date.format('L'));
-        assertEquals('M', 'Feb', date.format('M'));
-        assertEquals('N', '5', date.format('N'));
-        assertEquals('O', '-0500', date.format('O'));
-        assertEquals('P', '-05:00', date.format('P'));
-        assertEquals('Q', 'Q', date.format('Q'));
-        assertEquals('R', 'R', date.format('R'));
-        //assertEquals('S', 'th', date.format('S'));
-        //assertEquals('T', 'EST', date.format('T'));
-        assertEquals('U', '1234567890', date.format('U'));
-        assertEquals('V', 'V', date.format('V'));
-        assertEquals('W', '07', date.format('W'));
-        assertEquals('X', 'X', date.format('X'));
-        assertEquals('Y', '2009', date.format('Y'));
-        assertEquals('Z', '-18000', date.format('Z'));
+        assert.equal('pm', date.format('a'), 'a');
+        assert.equal('b', date.format('b'), 'b');
+        assert.equal('2009-02-13T18:31:30-05:00', date.format('c'), 'c');
+        assert.equal('13', date.format('d'), 'd');
+        //assert.equal('America/New_York', date.format('e'), 'e');
+        assert.equal('f', date.format('f'), 'f');
+        assert.equal('6', date.format('g'), 'g');
+        assert.equal('06', date.format('h'), 'h');
+        assert.equal('31', date.format('i'), 'i');
+        assert.equal('13', date.format('j'), 'j');
+        assert.equal('k', date.format('k'), 'k');
+        assert.equal('Friday', date.format('l'), 'l');
+        assert.equal('02', date.format('m'), 'm');
+        assert.equal('2', date.format('n'), 'n');
+        assert.equal('2009', date.format('o'), 'o');
+        assert.equal('p', date.format('p'), 'p');
+        assert.equal('q', date.format('q'), 'q');
+        assert.equal('Fri, 13 Feb 2009 18:31:30 -0500', date.format('r'), 'r');
+        assert.equal('30', date.format('s'), 's');
+        assert.equal('28', date.format('t'), 't');
+        assert.equal('u', date.format('u'), 'u');
+        assert.equal('v', date.format('v'), 'v');
+        assert.equal('5', date.format('w'), 'w');
+        assert.equal('x', date.format('x'), 'x');
+        assert.equal('09', date.format('y'), 'y');
+        assert.equal('43', date.format('z'), 'z');
+        assert.equal('PM', date.format('A'), 'A');
+        assert.equal('021', date.format('B'), 'B');
+        assert.equal('C', date.format('C'), 'C');
+        assert.equal('Fri', date.format('D'), 'D');
+        assert.equal('E', date.format('E'), 'E');
+        assert.equal('February', date.format('F'), 'F');
+        assert.equal('18', date.format('G'), 'G');
+        assert.equal('18', date.format('H'), 'H');
+        //assert.equal('0', date.format('I'), 'I');
+        assert.equal('J', date.format('J'), 'J');
+        assert.equal('K', date.format('K'), 'K');
+        assert.equal('0', date.format('L'), 'L');
+        assert.equal('Feb', date.format('M'), 'M');
+        assert.equal('5', date.format('N'), 'N');
+        assert.equal('-0500', date.format('O'), 'O');
+        assert.equal('-05:00', date.format('P'), 'P');
+        assert.equal('Q', date.format('Q'), 'Q');
+        assert.equal('R', date.format('R'), 'R');
+        //assert.equal('th', date.format('S'), 'S');
+        //assert.equal('EST', date.format('T'), 'T');
+        assert.equal('1234567890', date.format('U'), 'U');
+        assert.equal('V', date.format('V'), 'V');
+        assert.equal('07', date.format('W'), 'W');
+        assert.equal('X', date.format('X'), 'X');
+        assert.equal('2009', date.format('Y'), 'Y');
+        assert.equal('-18000', date.format('Z'), 'Z');
     },
 
-    testSFormatCallsTranslator: function () {
-        expectAsserts(3);
-
-        var date = Jate.UDate(0, 0, 4, 0, 0, 0);
-        var translatorCalled = false;
+    exports.testSFormatCallsTranslator = function () {
+        var expectedAsserts = 3, asserts = 0;
+        var date = UDate(0, 0, 4, 0, 0, 0);
 
         function translator(format, day) {
-            assertEquals(4, day);
-            assertEquals('{0ord}', format);
-            translatorCalled = true;
+            assert.equal(4, day);
+            ++asserts;
+
+            assert.equal('{0ord}', format);
+            ++asserts;
 
             return 'foobar';
         }
 
-        assertEquals('foobar', date.format('S', translator));
+        assert.equal('foobar', date.format('S', translator));
+        ++asserts;
+
+        assert.equal(expectedAsserts, asserts, 'expected asserts');
     },
 
-    testDFormatCallsTranslator: function () {
-        expectAsserts(2);
-
-        var date = Jate.UDate(2000, 1, 0, 0, 0, 0);
-        var translatorCalled = false;
+    exports.testDFormatCallsTranslator = function () {
+        var expectedAsserts = 2, asserts = 0;
+        var date = UDate(2000, 1, 0, 0, 0, 0);
 
         function translator(format) {
-            assertEquals('Mon', format);
-            translatorCalled = true;
+            assert.equal('Mon', format);
+            ++asserts;
 
             return 'foobar';
         }
 
-        assertEquals('foobar', date.format('D', translator));
+        assert.equal('foobar', date.format('D', translator));
+        ++asserts;
+
+        assert.equal(expectedAsserts, asserts, 'expected asserts');
     }
-});
+
+    if (require.main === module) {
+        require('patr/runner').run(exports);
+    }
+})();
